@@ -1,0 +1,13 @@
+source env/Scripts/activate
+
+python manage.py runserver
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py startapp accounts (Sau đó vào INSTALLED_APPS đăng kí là 'accounts')
+
+winpty python manage.py createsuperuser
+
+Khi dùng kiểu dữ liệu ImageField thì phải chạy lệnh "pip install pillow"

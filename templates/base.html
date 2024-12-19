@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="multikart">
+  <meta name="keywords" content="multikart">
+  <meta name="author" content="multikart">
+  <link rel="icon" href="{% static '/images/favicon/12.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static '/images/favicon/12.png' %}" type="image/x-icon">
+  <title>{% block title %}{% endblock %}</title>
+
+  {% include "includes/styles.html" %}
+</head>
+<body class="theme-color-12">
+  <!-- Loader -->
+  {% include "includes/loader.html" %}
+
+  <!-- Header -->
+  {% include "includes/header.html" %}
+
+  <!-- Content -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  {% include "includes/footer.html" %}
+
+  <!-- Quick view -->
+  {% include "includes/quick_view.html" %}
+
+  <!-- Tap to top end -->
+  {% include "includes/tap_to_top_end.html" %}
+
+  <!-- Scripts -->
+  {% include "includes/scripts.html" %}
+</body>
+</html>
