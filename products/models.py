@@ -2,6 +2,7 @@ from django.db import models
 from category.models import Category
 from django.utils.text import slugify
 from unidecode import unidecode
+from ckeditor.fields import RichTextField
 
 
 class Product(models.Model):
@@ -12,7 +13,8 @@ class Product(models.Model):
                             blank=True)  # Slug tự động tạo
     short_description = models.TextField(
         max_length=500, blank=True)  # Mô tả sản phẩm ngắn
-    long_description = models.TextField(blank=True)  # Mô tả sản phẩm dài
+    # Mô tả sản phẩm dài với CKEditor
+    long_description = RichTextField(blank=True)
     price = models.PositiveIntegerField()  # Giá tiền (lưu số nguyên)
     discount_price = models.PositiveIntegerField(
         blank=True, null=True)  # Giá giảm (nếu có)

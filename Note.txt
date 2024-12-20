@@ -10,6 +10,8 @@ python manage.py startapp accounts (Sau đó vào INSTALLED_APPS đăng kí là 
 
 winpty python manage.py createsuperuser
 
+pip install django-ckeditor
+
 Khi dùng kiểu dữ liệu ImageField thì phải chạy lệnh "pip install pillow"
 
 Cách xóa hết Migrations và chạy lại:
