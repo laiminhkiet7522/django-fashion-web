@@ -40,6 +40,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+    
+    def formatted_price(self):
+        """Định dạng giá gốc (price) theo tiền Việt Nam"""
+        return f"{self.price:,}đ".replace(",", ".")
+
+    def formatted_discount_price(self):
+        """Định dạng giá giảm (discount_price) theo tiền Việt Nam, nếu có"""
+        if self.discount_price:
+            return f"{self.discount_price:,}đ".replace(",", ".")
+        return None
 
 
 class ProductImage(models.Model):
