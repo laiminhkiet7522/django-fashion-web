@@ -41,12 +41,6 @@
                       <a href="javascript:void(0)" title="Add to Wishlist">
                         <i class="ti-heart" aria-hidden="true"></i>
                       </a>
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#quick-view" title="Quick View">
-                        <i class="ti-search" aria-hidden="true"></i>
-                      </a>
-                      <a href="compare.html" title="Compare">
-                        <i class="ti-reload" aria-hidden="true"></i>
-                      </a>
                     </div>
                   </div>
                   <div class="product-detail">
@@ -62,7 +56,7 @@
                     </a>
                     {% if item.product.discount_price %}
                     <h4>
-                      {{ item.product.discount_price }}
+                      {{ item.product.formatted_discount_price }}
                       <del>{{ item.product.formatted_price }}</del>
                     </h4>
                     {% else %}
@@ -102,12 +96,6 @@
                       <a href="javascript:void(0)" title="Add to Wishlist">
                         <i class="ti-heart" aria-hidden="true"></i>
                       </a>
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#quick-view" title="Quick View">
-                        <i class="ti-search" aria-hidden="true"></i>
-                      </a>
-                      <a href="compare.html" title="Compare">
-                        <i class="ti-reload" aria-hidden="true"></i>
-                      </a>
                     </div>
                   </div>
                   <div class="product-detail">
@@ -123,7 +111,7 @@
                     </a>
                     {% if item.product.discount_price %}
                     <h4>
-                      {{ item.product.discount_price }}
+                      {{ item.product.formatted_discount_price }}
                       <del>{{ item.product.formatted_price }}</del>
                     </h4>
                     {% else %}

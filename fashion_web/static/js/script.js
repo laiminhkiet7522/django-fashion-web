@@ -307,19 +307,6 @@
         $(this).val("99");
       }
     });
-
-    // Lấy modal quick-view
-    var quickViewModal = $("#quick-view");
-
-    // Đặt lại giá trị input khi modal được hiển thị
-    quickViewModal.on("shown.bs.modal", function () {
-      quickViewModal.find('input[name="quantity"]').val(1);
-    });
-
-    // Đặt lại giá trị input khi modal được đóng
-    quickViewModal.on("hidden.bs.modal", function () {
-      quickViewModal.find('input[name="quantity"]').val(1);
-    });
   });
 
   /*=====================
