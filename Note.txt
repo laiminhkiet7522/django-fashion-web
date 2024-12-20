@@ -11,3 +11,10 @@ python manage.py startapp accounts (Sau đó vào INSTALLED_APPS đăng kí là 
 winpty python manage.py createsuperuser
 
 Khi dùng kiểu dữ liệu ImageField thì phải chạy lệnh "pip install pillow"
+
+Cách xóa hết Migrations và chạy lại:
+1. Xóa database
+2. Xóa Migrations
+3. Chạy lệnh python manage.py runserver để tạo lại database
+4. Chạy python manage.py makemigrations -> python manage.py migrate
+5. Tạo lại user admin
