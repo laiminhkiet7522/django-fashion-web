@@ -3,6 +3,7 @@ from category.models import Category
 from django.utils.text import slugify
 from unidecode import unidecode
 from ckeditor.fields import RichTextField
+import os
 
 
 class Product(models.Model):
@@ -38,9 +39,12 @@ class Product(models.Model):
             self.slug = slugify(unidecode(self.product_name))
         super(Product, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return self.product_name
-    
+    def delete(self, *args, **kwargs):
+        # Xóa tất cả ảnh liên quan khi xóa sản phẩm
+        for image in self.images.all():
+            image.delete()
+        super(Product, self).delete(*args, **kwargs)
+
     def formatted_price(self):
         """Định dạng giá gốc (price) theo tiền Việt Nam"""
         return f"{self.price:,}đ".replace(",", ".")
@@ -50,6 +54,9 @@ class Product(models.Model):
         if self.discount_price:
             return f"{self.discount_price:,}đ".replace(",", ".")
         return None
+
+    def __str__(self):
+        return self.product_name
 
 
 class ProductImage(models.Model):
@@ -62,6 +69,21 @@ class ProductImage(models.Model):
     class Meta:
         verbose_name = 'Product Image'
         verbose_name_plural = 'Product Images'
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = ProductImage.objects.filter(pk=self.pk).first()
+            if old_instance and old_instance.image != self.image:
+                old_path = old_instance.image.path
+                if os.path.isfile(old_path):
+                    os.remove(old_path)
+        super(ProductImage, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Xóa file vật lý khi xóa ProductImage
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+        super(ProductImage, self).delete(*args, **kwargs)
 
     def __str__(self):
         return f"Image for {self.product.product_name}"
