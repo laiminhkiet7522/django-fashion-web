@@ -68,7 +68,7 @@ Shop
               </div>
             </div>
 
-            
+
             <!-- size filter start here -->
             <div class="collection-collapse-block border-0 open">
               <h3 class="collapse-block-title">size</h3>
@@ -94,7 +94,7 @@ Shop
               </div>
             </div>
 
-            
+
           </div>
           <!-- silde-bar colleps block end here -->
         </div>
@@ -115,7 +115,7 @@ Shop
                       <div class="col-12">
                         <div class="product-filter-content">
                           <div class="search-count">
-                            <h5>Showing Products 1-24 of 10 Result</h5>
+                            <h5>Hiện tại có <b>{{ product_count }}</b> sản phẩm tại Shop</h5>
                           </div>
                           <div class="collection-view">
                             <ul>
@@ -158,22 +158,21 @@ Shop
                   </div>
                   <div class="product-wrapper-grid product-load-more">
                     <div class="row margin-res">
-
+                      {% for item in products_with_images %}
                       <div class="col-xl-3 col-6 col-grid-box">
                         <div class="product-box">
                           <div class="img-wrapper">
                             <div class="front">
-                              <a href="#"><img src="../assets/images/pro3/35.jpg"
+                              <a href="#"><img src="{{ item.main_image.image.url }}"
                                   class="img-fluid blur-up lazyload bg-img" alt=""></a>
                             </div>
                             <div class="back">
-                              <a href="#"><img src="../assets/images/pro3/36.jpg"
+                              <a href="#"><img src="{{ item.next_image.image.url }}"
                                   class="img-fluid blur-up lazyload bg-img" alt=""></a>
                             </div>
                             <div class="cart-info cart-wrap">
-                              <button data-bs-toggle="modal" data-bs-target="#addtocart" title="Add to cart"><i
-                                  class="ti-shopping-cart"></i></button> <a href="javascript:void(0)"
-                                title="Add to Wishlist"><i class="ti-heart" aria-hidden="true"></i></a>
+                              <a href="javascript:void(0)" title="Add to Wishlist"><i class="ti-heart"
+                                  aria-hidden="true"></i></a>
                             </div>
                           </div>
                           <div class="product-detail">
@@ -181,21 +180,25 @@ Shop
                               <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                   class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></div>
                               <a href="product-page(no-sidebar).html">
-                                <h6>Slim Fit Cotton Shirt</h6>
+                                <h6>{{ item.product.product_name }}</h6>
                               </a>
-                              <p>Lorem Ipsum is simply dummy text of the printing and
-                                typesetting industry. Lorem Ipsum has been the
-                                industry's standard dummy text ever since the 1500s,
-                                when an unknown printer took a galley
-                                of type and scrambled it to make a type specimen
-                                book
+                              <p>{{ item.product.short_description }}
                               </p>
-                              <h4>$500.00</h4>
+                              {% if item.product.discount_price %}
+                              <h4>
+                                {{ item.product.formatted_discount_price }}
+                                <del>{{ item.product.formatted_price }}</del>
+                              </h4>
+                              {% else %}
+                              <h4>
+                                {{ item.product.formatted_price }}
+                              </h4>
+                              {% endif %}
                             </div>
                           </div>
                         </div>
                       </div>
-
+                      {% endfor %}
                     </div>
                   </div>
                   <div class="load-more-sec"><a href="javascript:void(0)" class="loadMore">Xem thêm</a></div>
