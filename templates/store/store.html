@@ -150,11 +150,11 @@ Shop
                         <div class="product-box">
                           <div class="img-wrapper">
                             <div class="front">
-                              <a href="#"><img src="{{ item.main_image.image.url }}"
+                              <a href="{{ item.product.get_url }}"><img src="{{ item.main_image.image.url }}"
                                   class="img-fluid blur-up lazyload bg-img" alt=""></a>
                             </div>
                             <div class="back">
-                              <a href="#"><img src="{{ item.next_image.image.url }}"
+                              <a href="{{ item.product.get_url }}"><img src="{{ item.next_image.image.url }}"
                                   class="img-fluid blur-up lazyload bg-img" alt=""></a>
                             </div>
                             <div class="cart-info cart-wrap">
@@ -166,7 +166,7 @@ Shop
                             <div>
                               <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                   class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                              <a href="product-page(no-sidebar).html">
+                              <a href="{{ item.product.get_url }}">
                                 <h6>{{ item.product.product_name }}</h6>
                               </a>
                               <p>{{ item.product.short_description }}

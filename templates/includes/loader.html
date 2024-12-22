@@ -41,7 +41,7 @@
                       </div>
                     </li>
                     <li>
-                      <a href="index.html">Trang chủ</a>
+                      <a href="{% url 'home' %}">Trang chủ</a>
                     </li>
                     <li><a href="{% url 'store' %}">Shop</a></li>
                     <li>
@@ -59,7 +59,7 @@
             </div>
             <div class="absolute-logo">
               <div class="brand-logo">
-                <a href="#"><img alt="" src="{% static '/images/icon/logo/12.png' %}"></a>
+                <a href="{% url 'home' %}"><img alt="" src="{% static '/images/icon/logo/12.png' %}"></a>
               </div>
             </div>
             <div class="">

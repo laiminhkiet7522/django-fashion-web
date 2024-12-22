@@ -41,4 +41,15 @@ def store(request, category_slug=None):
 
 def product_detail(request, category_slug, product_slug):
 
-    return render(request, 'store/product_detail.html')
+    try:
+        single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+        product_images = ProductImage.objects.filter(product=single_product).order_by('-is_main', 'id')
+    except Exception as e:
+        raise e
+
+    context = {
+        'single_product': single_product,
+        'product_images': product_images,
+    }
+    
+    return render(request, 'store/product_detail.html', context)

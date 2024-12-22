@@ -3,6 +3,7 @@ from category.models import Category
 from django.utils.text import slugify
 from unidecode import unidecode
 from ckeditor.fields import RichTextField
+from django.urls import reverse
 import os
 import random
 import string
@@ -70,6 +71,9 @@ class Product(models.Model):
         if self.discount_price:
             return f"{self.discount_price:,}đ".replace(",", ".")
         return None
+    
+    def get_url(self):
+        return reverse('product_detail', args=[self.category.slug, self.slug])
 
     def __str__(self):
         return self.product_name

@@ -1,7 +1,7 @@
 {% load static %}
 <div class="title1 section-t-space">
-  <h4>exclusive products</h4>
-  <h2 class="title-inner1">special products</h2>
+  <h4>KVBL</h4>
+  <h2 class="title-inner1">Top sản phẩm</h2>
 </div>
 <section class="section-b-space pt-0 ratio_asos">
   <div class="container">
@@ -9,8 +9,8 @@
       <div class="col">
         <div class="theme-tab">
           <ul class="tabs tab-title">
-            <li class="current"><a href="tab-4">New Products</a></li>
-            <li class=""><a href="tab-5">Featured Products</a></li>
+            <li class="current"><a href="tab-4">Sản phẩm mới</a></li>
+            <li class=""><a href="tab-5">Sản phẩm nổi bật</a></li>
           </ul>
           <div class="tab-content-cls">
 
@@ -21,10 +21,10 @@
                 <div class="product-box col-md-3">
                   <div class="img-wrapper">
                     <div class="lable-block">
-                      <span class="lable3">new</span>
+                      <span class="lable3">mới</span>
                     </div>
                     <div class="front">
-                      <a href="product-page(no-sidebar).html">
+                      <a href="{{ item.product.get_url }}">
                         {% if item.main_image %}
                         <img src="{{ item.main_image.image.url }}" class="img-fluid blur-up lazyload bg-img"
                           alt="{{ item.product.product_name }}">
@@ -48,7 +48,7 @@
                       <i class="fa fa-star"></i>
                       <i class="fa fa-star"></i>
                     </div>
-                    <a href="product-page(no-sidebar).html">
+                    <a href="{{ item.product.get_url }}">
                       <h6>{{ item.product.product_name }}</h6>
                     </a>
                     {% if item.product.discount_price %}
@@ -73,10 +73,10 @@
                 <div class="product-box col-md-3">
                   <div class="img-wrapper">
                     <div class="lable-block">
-                      <span class="lable3">new</span>
+                      <span class="lable3">bán chạy</span>
                     </div>
                     <div class="front">
-                      <a href="product-page(no-sidebar).html">
+                      <a href="{{ item.product.get_url }}">
                         {% if item.main_image %}
                         <img src="{{ item.main_image.image.url }}" class="img-fluid blur-up lazyload bg-img"
                           alt="{{ item.product.product_name }}">
@@ -100,7 +100,7 @@
                       <i class="fa fa-star"></i>
                       <i class="fa fa-star"></i>
                     </div>
-                    <a href="product-page(no-sidebar).html">
+                    <a href="{{ item.product.get_url }}">
                       <h6>{{ item.product.product_name }}</h6>
                     </a>
                     {% if item.product.discount_price %}
