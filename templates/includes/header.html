@@ -43,6 +43,7 @@
                     </div>
                   </a>
                   <ul id="sub-menu" class="sm pixelstrap sm-vertical">
+                    <li><a href="{% url 'store' %}">Shop</a></li>
                     {% for category in links %}
                     <li> <a href="{{ category.get_url }}">{{ category.category_name }}</a>
                     </li>
@@ -61,6 +62,7 @@
                     </div>
                   </li>
                   <li><a href="index.html">Trang chủ</a></li>
+                  <li><a href="{% url 'store' %}">Shop</a></li>
                   <li class="mega" id="hover-cls">
                     <a href="{{ specific_urls.shirt_url }}">Áo sơ mi</a>
                   </li>

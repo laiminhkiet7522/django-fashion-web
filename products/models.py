@@ -4,6 +4,22 @@ from django.utils.text import slugify
 from unidecode import unidecode
 from ckeditor.fields import RichTextField
 import os
+import random
+import string
+
+
+def generate_unique_image_name(instance, filename):
+    """
+    Sinh một tên file duy nhất cho hình ảnh dựa trên "image_" và chuỗi ngẫu nhiên 10 ký tự.
+    """
+    # Lấy phần mở rộng của file
+    ext = os.path.splitext(filename)[-1].lower()
+    # Tạo chuỗi ngẫu nhiên 10 ký tự
+    random_string = ''.join(random.choices(
+        string.ascii_letters + string.digits, k=10))
+    # Định dạng tên file
+    new_filename = f"image_{random_string}{ext}"
+    return os.path.join('photos/products/', new_filename)
 
 
 class Product(models.Model):
@@ -63,7 +79,7 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product, related_name='images', on_delete=models.CASCADE)  # Liên kết với Product
     image = models.ImageField(
-        upload_to='photos/products/')  # Đường dẫn upload ảnh
+        upload_to=generate_unique_image_name)  # Sử dụng hàm để sinh tên file
     is_main = models.BooleanField(default=False)  # Ảnh chính của sản phẩm
 
     class Meta:
