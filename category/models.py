@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from unidecode import unidecode
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -15,6 +16,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+
+    def get_url(self):
+        return reverse('products_by_category', args=[self.slug])
 
     def save(self, *args, **kwargs):
         # Kiểm tra xem category_name có thay đổi không
