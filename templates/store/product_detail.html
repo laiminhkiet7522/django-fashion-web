@@ -39,7 +39,8 @@
             <div class="col-12 p-0">
               <div class="slider-right-nav">
                 {% for image in product_images %}
-                <div><img src="{{ image.image.url }}" alt="{{ single_product.product_name }}" class="img-fluid blur-up lazyload"></div>
+                <div><img src="{{ image.image.url }}" alt="{{ single_product.product_name }}"
+                    class="img-fluid blur-up lazyload"></div>
                 {% endfor %}
               </div>
             </div>
@@ -48,7 +49,8 @@
         <div class="col-lg-3 col-sm-10 col-xs-12 order-up">
           <div class="product-right-slick">
             {% for image in product_images %}
-            <div><img src="{{ image.image.url }}" alt="{{ single_product.product_name }}" class="img-fluid blur-up lazyload image_zoom_cls-0">
+            <div><img src="{{ image.image.url }}" alt="{{ single_product.product_name }}"
+                class="img-fluid blur-up lazyload image_zoom_cls-0">
             </div>
             {% endfor %}
           </div>
@@ -56,6 +58,10 @@
         <div class="col-lg-4">
           <div class="product-right product-description-box">
             <h2>{{ single_product.product_name }}</h2>
+            {% if single_product.stock <= 0 %}
+            <span class="lable3" style="color: red; font-weight: bold;">Hết Hàng Tạm Thời</span>
+            {% else %}
+            {% endif %}
             <div class="border-product">
               <h6 class="product-title">Mô tả ngắn:</h6>
               <p>{{ single_product.short_description }}</p>
@@ -105,7 +111,7 @@
               <li class="bg-light2"></li>
             </ul>
             <div id="selectSize" class="addeffect-section product-description border-product">
-              <h6 class="product-title">select size</h6>
+              <h6 class="product-title">Chọn size</h6>
               <div class="modal fade" id="sizemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -120,7 +126,7 @@
                   </div>
                 </div>
               </div>
-              <h6 class="error-message">please select size</h6>
+              <h6 class="error-message">Chọn size</h6>
               <div class="size-box">
                 <ul>
                   <li><a href="javascript:void(0)">s</a></li>
@@ -130,10 +136,17 @@
                 </ul>
               </div>
             </div>
-            <div class="product-buttons"><a href="javascript:void(0)" id="cartEffect"
-                class="btn btn-solid hover-solid btn-animation">add to cart</a> <a href="#"
-                class="btn btn-solid">wishlist</a>
+            {% if single_product.stock > 0 %}
+            <div class="product-buttons">
+              <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Mua ngay</a>
+              <a href="#" class="btn btn-solid">Yêu thích</a>
             </div>
+            {% else %}
+            <div class="product-buttons">
+              <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Liên hệ</a>
+              <a href="#" class="btn btn-solid">Yêu thích</a>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>
