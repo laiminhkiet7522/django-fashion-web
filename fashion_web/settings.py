@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'products',
     'ckeditor',
     'ckeditor_uploader',
+    'carts',
 ]
 
 MIDDLEWARE = [

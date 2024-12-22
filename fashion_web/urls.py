@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('store/', include('products.urls')),
+    path('cart/', include('carts.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),  # URL CKEditor upload
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
