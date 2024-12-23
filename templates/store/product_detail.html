@@ -58,43 +58,48 @@
         <div class="col-lg-4">
           <div class="product-right product-description-box">
             <h2>{{ single_product.product_name }}</h2>
-            {% if single_product.stock <= 0 %}
-            <span class="lable3" style="color: red; font-weight: bold;">Hết Hàng Tạm Thời</span>
-            {% else %}
-            {% endif %}
-            <div class="border-product">
-              <h6 class="product-title">Mô tả ngắn:</h6>
-              <p>{{ single_product.short_description }}</p>
-            </div>
-            <div class="single-product-tables border-product detail-section">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Free Ship:</td>
-                    <td>Đơn hàng từ 200.000đ</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="border-product">
-              <h6 class="product-title">Thanh toán Online bảo mật tuyệt đối</h6>
-              <div class="payment-card-bottom">
-                <ul>
-                  <li>
-                    <a href="#"><img src="{% static '/images/icon/visa.png' %}" alt=""></a>
-                  </li>
-                  <li>
-                    <a href="#"><img src="{% static '/images/icon/mastercard.png' %}" alt=""></a>
-                  </li>
-                  <li>
-                    <a href="#"><img src="{% static '/images/icon/paypal.png' %}" alt=""></a>
-                  </li>
-                  <li>
-                    <a href="#"><img src="{% static '' %}/images/icon/american-express.png" alt=""></a>
-                  </li>
-                </ul>
+            {% if single_product.stock <= 0 %} <span class="lable3" style="color: red; font-weight: bold;">(Hết Hàng Tạm
+              Thời)</span>
+              {% else %}
+              {% endif %}
+
+              {% if in_cart %} <span class="lable3" style="color: green; font-weight: bold;">(Đã Có Trong Giỏ
+                Hàng)</span>
+              {% else %}
+              {% endif %}
+              <div class="border-product">
+                <h6 class="product-title">Mô tả ngắn:</h6>
+                <p>{{ single_product.short_description }}</p>
               </div>
-            </div>
+              <div class="single-product-tables border-product detail-section">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Free Ship:</td>
+                      <td>Đơn hàng từ 200.000đ</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="border-product">
+                <h6 class="product-title">Thanh toán Online bảo mật tuyệt đối</h6>
+                <div class="payment-card-bottom">
+                  <ul>
+                    <li>
+                      <a href="#"><img src="{% static '/images/icon/visa.png' %}" alt=""></a>
+                    </li>
+                    <li>
+                      <a href="#"><img src="{% static '/images/icon/mastercard.png' %}" alt=""></a>
+                    </li>
+                    <li>
+                      <a href="#"><img src="{% static '/images/icon/paypal.png' %}" alt=""></a>
+                    </li>
+                    <li>
+                      <a href="#"><img src="{% static '' %}/images/icon/american-express.png" alt=""></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
           </div>
         </div>
         <div class="col-lg-4">
@@ -138,8 +143,19 @@
             </div>
             {% if single_product.stock > 0 %}
             <div class="product-buttons">
-              <a href="{% url 'add_cart' single_product.id %}" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Mua ngay</a>
-              <a href="#" class="btn btn-solid">Yêu thích</a>
+              {% if in_cart %}
+              <a href="{% url 'cart' %}" id="cartEffect" class="btn btn-solid hover-solid btn-animation"
+                style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fa fa-eye" style="font-size: 1.2em; line-height: 1; vertical-align: middle;"></i>
+                <span style="font-size: 1em; line-height: 1; vertical-align: middle;">Xem giỏ hàng</span>
+              </a>
+              {% else %}
+              <a href="{% url 'add_cart' single_product.id %}" id="cartEffect"
+                class="btn btn-solid hover-solid btn-animation" style="text-decoration: none;">
+                Mua ngay
+              </a>
+              {% endif %}
+              <a href="#" class="btn btn-solid" style="text-decoration: none;">Yêu thích</a>
             </div>
             {% else %}
             <div class="product-buttons">
