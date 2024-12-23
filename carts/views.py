@@ -3,6 +3,7 @@ from products.models import Product
 from .models import Cart, CartItem
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+import locale
 
 # Create your views here.
 
@@ -34,8 +35,7 @@ def add_cart(request, product_id):
             cart=cart,
         )
         cart_item.save()
-    return HttpResponse(cart_item.quantity)
-    exit()
+
     return redirect("cart")
 
 
@@ -43,8 +43,10 @@ def cart(request, total=0, quantity=0, cart_items=None):
     try:
         cart = Cart.objects.get(cart_id=_cart_id(request))
         cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+
+        cart_items_with_images = []
+
         for cart_item in cart_items:
-            # Nếu sản phẩm có giá giảm, sử dụng discount_price
             product_price = (
                 cart_item.product.discount_price
                 if cart_item.product.discount_price
@@ -52,12 +54,27 @@ def cart(request, total=0, quantity=0, cart_items=None):
             )
             total += product_price * cart_item.quantity
             quantity += cart_item.quantity
+
+            main_image = cart_item.product.images.filter(is_main=True).first()
+            cart_items_with_images.append(
+                {
+                    "cart_item": cart_item,
+                    "main_image": main_image.image.url if main_image else None,
+                }
+            )
+
+        # Định dạng lại theo hiển thị kiểu tiền Việt Nam
+        locale.setlocale(locale.LC_ALL, "vi_VN.UTF-8")
+        formatted_total = locale.format_string("%d", total, grouping=True) + "đ"
+
     except ObjectDoesNotExist:
-        pass
+        cart_items_with_images = []
+        formatted_total = "0đ"
 
     context = {
         "total": total,
+        "formatted_total": formatted_total,
         "quantity": quantity,
-        "cart_items": cart_items,
+        "cart_items": cart_items_with_images,
     }
     return render(request, "store/cart.html", context)
