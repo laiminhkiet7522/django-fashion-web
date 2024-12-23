@@ -41,6 +41,9 @@ def add_cart(request, product_id):
 
 def cart(request, total=0, quantity=0, cart_items=None):
     try:
+        shipping_fee = 0
+        grand_total = 0
+
         cart = Cart.objects.get(cart_id=_cart_id(request))
         cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
@@ -63,17 +66,33 @@ def cart(request, total=0, quantity=0, cart_items=None):
                 }
             )
 
+        # Nếu đơn hàng có giá trị nhỏ hơn bằng 200.000đ thì tính phí vận chuyển là 25.000đ
+        if total <= 200000:
+            shipping_fee = 25000
+
+        grand_total = total + shipping_fee
+
         # Định dạng lại theo hiển thị kiểu tiền Việt Nam
         locale.setlocale(locale.LC_ALL, "vi_VN.UTF-8")
         formatted_total = locale.format_string("%d", total, grouping=True) + "đ"
+        formatted_grand_total = (
+            locale.format_string("%d", grand_total, grouping=True) + "đ"
+        )
+        formatted_shipping_fee = (
+            locale.format_string("%d", shipping_fee, grouping=True) + "đ"
+        )
 
     except ObjectDoesNotExist:
         cart_items_with_images = []
         formatted_total = "0đ"
+        formatted_grand_total = "0đ"
+        formatted_shipping_fee = "0đ"
 
     context = {
         "total": total,
         "formatted_total": formatted_total,
+        "formatted_grand_total": formatted_grand_total,
+        "formatted_shipping_fee": formatted_shipping_fee,
         "quantity": quantity,
         "cart_items": cart_items_with_images,
     }
