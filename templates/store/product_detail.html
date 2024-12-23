@@ -126,7 +126,7 @@
                   </div>
                 </div>
               </div>
-              <h6 class="error-message">Chọn size</h6>
+              <!-- <h6 class="error-message">Chọn size</h6> -->
               <div class="size-box">
                 <ul>
                   <li><a href="javascript:void(0)">s</a></li>
@@ -138,7 +138,7 @@
             </div>
             {% if single_product.stock > 0 %}
             <div class="product-buttons">
-              <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Mua ngay</a>
+              <a href="{% url 'add_cart' single_product.id %}" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Mua ngay</a>
               <a href="#" class="btn btn-solid">Yêu thích</a>
             </div>
             {% else %}

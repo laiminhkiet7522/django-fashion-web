@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'category',
     'accounts',
     'products',
+    'carts',
     'ckeditor',
     'ckeditor_uploader',
-    'carts',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +137,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
