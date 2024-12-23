@@ -13,7 +13,7 @@ Giỏ hàng của bạn
     <div class="row">
       <div class="col-sm-6">
         <div class="page-title">
-          <h2>Sản phẩm hiện có trong giỏ hàng</h2>
+          <h2>Giỏ hàng của bạn</h2>
         </div>
       </div>
       <div class="col-sm-6">
@@ -28,6 +28,23 @@ Giỏ hàng của bạn
   </div>
 </div>
 <!-- breadcrumb End -->
+
+{% if not cart_items %}
+    <!-- section start -->
+    <section class="p-0">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="error-section">
+              <h2>Hiện tại không có sản phẩm nào trong giỏ hàng của bạn!</h2>
+              <a href="{% url 'store' %}" class="btn btn-solid">Tiếp tục mua sắm</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Section ends -->
+{% else %}
 <!--section start-->
 <section class="cart-section section-b-space">
   <div class="container">
@@ -54,18 +71,18 @@ Giỏ hàng của bạn
               <td><a href="#">{{ item.cart_item.product.product_name }}</a>
                 <div class="mobile-cart-content row">
                   <div class="input-group input-spinner"
-                    style="width: 50%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+                    style="width: 40%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                     <div class="input-group-prepend">
-                      <button class="btn" type="button" id="button-minus"
-                        style="width: 30px; height: 30px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                      <a href="{% url 'remove_cart' item.cart_item.product.id %}" class="btn" type="button" id="button-minus"
+                        style="width: 20px; height: 20px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
                         <i class="fa fa-minus"></i>
-                      </button>
+                      </a>
                     </div>
                     <input readonly type="text" class="form-control" value="{{ item.cart_item.quantity }}"
-                      style="width: 40px; height: 30px; text-align: center; vertical-align: middle; line-height: 20px;">
+                      style="width: 20px; height: 20px; text-align: center; vertical-align: middle; line-height: 20px;">
                     <div class="input-group-append">
                       <a href="{% url 'add_cart' item.cart_item.product.id %}" class="btn" type="button" id="button-plus"
-                        style="width: 30px; height: 30px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        style="width: 20px; height: 20px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
                         <i class="fa fa-plus"></i>
                       </a>
                     </div>
@@ -81,7 +98,7 @@ Giỏ hàng của bạn
                     {% endif %}
                   </div>
                   <div class="col">
-                    <h2 class="td-color"><a href="#" class="icon"><i class="ti-close"></i></a>
+                    <h2 class="td-color"><a href="{% url 'remove_cart_item' item.cart_item.product.id %}" class="icon"><i class="ti-close"></i></a>
                     </h2>
                   </div>
                 </div>
@@ -157,5 +174,6 @@ Giỏ hàng của bạn
   </div>
 </section>
 <!--section end-->
+{% endif %}
 
 {% endblock %}
