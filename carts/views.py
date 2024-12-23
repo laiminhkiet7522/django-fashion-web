@@ -81,11 +81,15 @@ def cart(request, total=0, quantity=0, cart_items=None):
             total += product_price * cart_item.quantity
             quantity += cart_item.quantity
 
+            # Gọi hàm get_url từ product và thêm vào context
+            product_url = cart_item.product.get_url()
+
             main_image = cart_item.product.images.filter(is_main=True).first()
             cart_items_with_images.append(
                 {
                     "cart_item": cart_item,
                     "main_image": main_image.image.url if main_image else None,
+                    "product_url": product_url,
                 }
             )
 

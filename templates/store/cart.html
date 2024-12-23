@@ -66,9 +66,9 @@ Giỏ hàng của bạn
           <tbody>
             <tr>
               <td>
-                <a href="#"><img src="{{ item.main_image  }}" alt=""></a>
+                <a href="{{ item.product_url }}"><img src="{{ item.main_image  }}" alt=""></a>
               </td>
-              <td><a href="#">{{ item.cart_item.product.product_name }}</a>
+              <td><a href="{{ item.product_url }}">{{ item.cart_item.product.product_name }}</a>
                 <div class="mobile-cart-content row">
                   <div class="input-group input-spinner"
                     style="width: 40%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
@@ -168,7 +168,7 @@ Giỏ hàng của bạn
       </div>
     </div>
     <div class="row cart-buttons">
-      <div class="col-6"><a href="#" class="btn btn-solid">Tiếp tục mua sắm</a></div>
+      <div class="col-6"><a href="{% url 'store' %}" class="btn btn-solid">Tiếp tục mua sắm</a></div>
       <div class="col-6"><a href="#" class="btn btn-solid">Thanh toán</a></div>
     </div>
   </div>
