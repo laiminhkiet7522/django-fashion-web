@@ -110,10 +110,14 @@
                         </div>
                       </div>
                     </li>
-                    <li class="onhover-div mobile-cart">
-                      <div><img alt="" src="{% static '/images/icon/layout4/cart.png' %}"
-                          class="img-fluid blur-up lazyload"> <i class="ti-shopping-cart"></i></div>
-                    </li>
+                    <a href="{% url 'cart' %}">
+                      <li class="onhover-div mobile-cart">
+                        <div><img alt="" src="{% static '/images/icon/layout4/cart.png' %}"
+                            class="img-fluid blur-up lazyload"> <i class="ti-shopping-cart"></i></div>
+                        <span
+                          style="position: absolute; background: var(--theme-color); width: 20px; height: 20px; color: #fff; border-radius: 20px; text-align: center; font-size: 12px; line-height: 14px; font-weight: 600; top: 20%; right: -8px; padding: 3px;">{{cart_count}}</span>
+                      </li>
+                    </a>
                   </ul>
                 </div>
               </div>
