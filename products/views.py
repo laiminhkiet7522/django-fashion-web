@@ -2,13 +2,12 @@ from django.shortcuts import render, get_object_or_404
 from products.models import Product, ProductImage
 from category.models import Category
 from carts.models import CartItem
-from django.http import HttpResponse
 from carts.views import _cart_id
 from django.db.models import Q
-from unidecode import unidecode
 
 
 def store(request, category_slug=None):
+
     categories = None
     products = None
 
@@ -72,18 +71,13 @@ def product_detail(request, category_slug, product_slug):
     return render(request, "store/product_detail.html", context)
 
 
-from django.db.models import Q
-from django.shortcuts import render
-
-
-from django.db.models import Q
-
-
 def search(request):
     products = []
     product_count = 0
+    keyword_exists = False
 
     if "keyword" in request.GET:
+        keyword_exists = True
         keyword = request.GET["keyword"].strip()  # Loại bỏ khoảng trắng thừa
         if keyword:
             # Viết hoa chữ cái đầu mỗi từ
@@ -112,5 +106,7 @@ def search(request):
     context = {
         "products_with_images": products_with_images,
         "product_count": product_count,
+        "keyword": keyword,
+        "keyword_exists": keyword_exists,
     }
     return render(request, "store/store.html", context)

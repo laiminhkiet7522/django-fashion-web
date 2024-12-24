@@ -2,8 +2,15 @@
 {% load static %}
 
 {% block title %}
+
+{% if keyword_exists %}
+Tìm kiếm: {{ keyword }}
+
+{% else %}
 Shop{% if category_slug %}
 | {{ category_slug|title }}
+{% endif %}
+
 {% endif %}
 {% endblock %}
 
@@ -30,7 +37,22 @@ Shop{% if category_slug %}
 </div>
 <!-- breadcrumb end -->
 
-
+{% if not products_with_images %}
+<!-- section start -->
+<section class="p-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="error-section">
+          <h2>Hiện tại không có sản phẩm nào được tìm thấy cho bạn!</h2>
+          <a href="{% url 'store' %}" class="btn btn-solid">Tiếp tục mua sắm</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Section ends -->
+{% else %}
 <!-- section start -->
 <section class="section-b-space ratio_asos">
   <div class="collection-wrapper">
@@ -191,4 +213,5 @@ Shop{% if category_slug %}
   </div>
 </section>
 <!-- section End -->
+{% endif %}
 {% endblock %}
