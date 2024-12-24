@@ -117,12 +117,9 @@
                   <ul>
                     <select name="color" class="form-control" required>
                       <option value="" disabled selected>Chọn màu</option>
-                      {% for i in single_product.variation_set.sizes %}
-                      <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                      {% for i in single_product.variation_set.all %}
+                      <option value="{{ i.variation_value | title }}">{{ i.variation_value | title }}</option>
                       {% endfor %}
-                      <option value="Đen">Đen</option>
-                      <option value="Đỏ">Đỏ</option>
-                      <option value="Xanh">Xanh</option>
                     </select>
                   </ul>
                 </div>
@@ -133,12 +130,9 @@
                   <ul>
                     <select name="size" class="form-control" required>
                       <option value="" disabled selected>Chọn size</option>
-                      {% for i in single_product.variation_set.sizes %}
-                      <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                      {% for i in single_product.variation_set.all %}
+                      <option value="{{ i.variation_value | upper }}">{{ i.variation_value | upper }}</option>
                       {% endfor %}
-                      <option value="S">S</option>
-                      <option value="M">M</option>
-                      <option value="L">L</option>
                     </select>
                   </ul>
                 </div>
