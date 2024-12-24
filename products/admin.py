@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
-from .models import Product, ProductImage
+from .models import Product, ProductImage, Variation
 
 # Inline model để quản lý ảnh liên quan
 
@@ -37,5 +37,12 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageInline]  # Thêm inline quản lý ảnh
 
 
+class VariationAdmin(admin.ModelAdmin):
+    list_display = ("product", "variation_category", "variation_value", "is_active")
+    list_editable = ("is_active",)
+    list_filter = ("product", "variation_category", "variation_value")
+
+
 # Đăng ký các model vào admin
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Variation, VariationAdmin)

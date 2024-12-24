@@ -116,3 +116,23 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.product_name}"
+
+
+variation_category_choice = (
+    ("color", "color"),
+    ("size", "size"),
+)
+
+
+class Variation(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    variation_category = models.CharField(
+        max_length=100, choices=variation_category_choice
+    )
+    variation_value = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.product

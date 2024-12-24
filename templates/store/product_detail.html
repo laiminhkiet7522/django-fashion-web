@@ -68,21 +68,21 @@
               {% else %}
               {% endif %}
               <div class="border-product">
-                <h6 class="product-title">Mô tả ngắn:</h6>
+                <h6 class="product-title" style="font-size: 14px;">Mô tả ngắn:</h6>
                 <p>{{ single_product.short_description }}</p>
               </div>
               <div class="single-product-tables border-product detail-section">
                 <table>
                   <tbody>
                     <tr>
-                      <td>Free Ship:</td>
-                      <td>Đơn hàng từ 200.000đ</td>
+                      <td class="product-title" style="font-size: 14px;">Free Ship:</td>
+                      <td class="product-title" style="font-size: 14px;">Đơn hàng từ 200.000đ</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div class="border-product">
-                <h6 class="product-title">Thanh toán Online bảo mật tuyệt đối</h6>
+                <h6 class="product-title" style="font-size: 14px;">Thanh toán Online bảo mật tuyệt đối</h6>
                 <div class="payment-card-bottom">
                   <ul>
                     <li>
@@ -103,67 +103,71 @@
           </div>
         </div>
         <div class="col-lg-4">
-          <div class="product-right product-form-box">
-            {% if single_product.discount_price %}
-            <h4><del>{{ single_product.formatted_price }}</del><span>55% off</span></h4>
-            <h3>{{ single_product.formatted_discount_price }}</h3>
-            {% else %}
-            <h3>{{ single_product.formatted_price }}</h3>
-            {% endif %}
-            <ul class="color-variant">
-              <li class="bg-light0 active"></li>
-              <li class="bg-light1"></li>
-              <li class="bg-light2"></li>
-            </ul>
-            <div id="selectSize" class="addeffect-section product-description border-product">
-              <h6 class="product-title">Chọn size</h6>
-              <div class="modal fade" id="sizemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Sheer Straight Kurta</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
-                          aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body"><img src="../assets/images/size-chart.jpg" alt=""
-                        class="img-fluid blur-up lazyload"></div>
-                  </div>
+          <form action="{% url 'add_cart' single_product.id %}" method="GET">
+            <div class="product-right product-form-box">
+              {% if single_product.discount_price %}
+              <h4><del>{{ single_product.formatted_price }}</del><span>{{ discount_percentage }}% off</span></h4>
+              <h3>{{ single_product.formatted_discount_price }}</h3>
+              {% else %}
+              <h3>{{ single_product.formatted_price }}</h3>
+              {% endif %}
+              <div class="addeffect-section product-description border-product">
+                <h6 class="product-title">Vui lòng chọn màu áo</h6>
+                <div class="size-box">
+                  <ul>
+                    <select name="color" class="form-control" required>
+                      <option value="" disabled selected>Chọn màu</option>
+                      {% for i in single_product.variation_set.sizes %}
+                      <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                      {% endfor %}
+                      <option value="Đen">Đen</option>
+                      <option value="Đỏ">Đỏ</option>
+                      <option value="Xanh">Xanh</option>
+                    </select>
+                  </ul>
                 </div>
               </div>
-              <!-- <h6 class="error-message">Chọn size</h6> -->
-              <div class="size-box">
-                <ul>
-                  <li><a href="javascript:void(0)">s</a></li>
-                  <li><a href="javascript:void(0)">m</a></li>
-                  <li><a href="javascript:void(0)">l</a></li>
-                  <li><a href="javascript:void(0)">xl</a></li>
-                </ul>
+              <div class="addeffect-section product-description border-product">
+                <h6 class="product-title">Vui lòng chọn size áo</h6>
+                <div class="size-box">
+                  <ul>
+                    <select name="size" class="form-control" required>
+                      <option value="" disabled selected>Chọn size</option>
+                      {% for i in single_product.variation_set.sizes %}
+                      <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                      {% endfor %}
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                    </select>
+                  </ul>
+                </div>
               </div>
-            </div>
-            {% if single_product.stock > 0 %}
-            <div class="product-buttons">
-              {% if in_cart %}
-              <a href="{% url 'cart' %}" id="cartEffect" class="btn btn-solid hover-solid btn-animation"
-                style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                <i class="fa fa-eye" style="font-size: 1.2em; line-height: 1; vertical-align: middle; margin-bottom: 0.2em;"></i>
-                <span style="font-size: 1em; line-height: 1; vertical-align: middle;">Xem giỏ hàng</span>
-              </a>
+              {% if single_product.stock > 0 %}
+              <div class="product-buttons">
+                {% if in_cart %}
+                <a href="{% url 'cart' %}" id="cartEffect" class="btn btn-outline me-3 hover-solid btn-animation"
+                  style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                  <i class="fa fa-eye"
+                    style="font-size: 1.2em; line-height: 1; vertical-align: middle; margin-bottom: 0.2em;"></i>
+                  <span style="font-size: 1em; line-height: 1; vertical-align: middle;">Xem giỏ hàng</span>
+                </a>
+                {% else %}
+                <button type="submit" id="cartEffect"
+                  class="btn btn-solid hover-solid btn-animation" style="text-decoration: none;">
+                  Mua ngay
+                </button>
+                {% endif %}
+                <a href="#" class="btn btn-solid" style="text-decoration: none;">Yêu thích</a>
+              </div>
               {% else %}
-              <a href="{% url 'add_cart' single_product.id %}" id="cartEffect"
-                class="btn btn-solid hover-solid btn-animation" style="text-decoration: none;">
-                Mua ngay
-              </a>
+              <div class="product-buttons">
+                <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Liên hệ</a>
+                <a href="#" class="btn btn-solid">Yêu thích</a>
+              </div>
               {% endif %}
-              <a href="#" class="btn btn-solid" style="text-decoration: none;">Yêu thích</a>
             </div>
-            {% else %}
-            <div class="product-buttons">
-              <a href="javascript:void(0)" id="cartEffect" class="btn btn-solid hover-solid btn-animation">Liên hệ</a>
-              <a href="#" class="btn btn-solid">Yêu thích</a>
-            </div>
-            {% endif %}
-          </div>
+          </form>
         </div>
       </div>
     </div>
