@@ -118,9 +118,21 @@ class ProductImage(models.Model):
         return f"Image for {self.product.product_name}"
 
 
+class VariationManager(models.Manager):
+    def colors(self):
+        return super(VariationManager, self).filter(
+            variation_category="Color", is_active=True
+        )
+
+    def sizes(self):
+        return super(VariationManager, self).filter(
+            variation_category="Size", is_active=True
+        )
+
+
 variation_category_choice = (
-    ("color", "color"),
-    ("size", "size"),
+    ("Color", "Color"),
+    ("Size", "Size"),
 )
 
 
@@ -134,5 +146,7 @@ class Variation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
-        return self.product
+    objects = VariationManager()
+
+    def __str__(self):
+        return self.variation_value
