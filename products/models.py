@@ -148,5 +148,12 @@ class Variation(models.Model):
 
     objects = VariationManager()
 
+    def save(self, *args, **kwargs):
+        if self.variation_category == "Color":
+            self.variation_value = self.variation_value.title()
+        elif self.variation_category == "Size":
+            self.variation_value = self.variation_value.upper()
+        super(Variation, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.variation_value
