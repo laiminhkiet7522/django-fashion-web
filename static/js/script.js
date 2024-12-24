@@ -1825,7 +1825,7 @@
             e.preventDefault();
             $(".product-load-more .col-grid-box:hidden").slice(0, 4).slideDown();
             if ($(".product-load-more .col-grid-box:hidden").length === 0) {
-                $(".loadMore").text('no more products');
+                $(".loadMore").text('Đã xem hết sản phẩm');
             }
         });
     });
@@ -1841,7 +1841,7 @@
                 $(".load-product").removeClass("loading");
                 $(".infinite-product .product-box:hidden").slice(0, 4).slideDown();
                 if ($(".infinite-product .product-box:hidden").length === 0) {
-                    $(".load-product").text('no more products');
+                    $(".load-product").text("Đã xem hết sản phẩm");
                     $(".load-product").addClass('mt-4');
                 }
             }, 2500);

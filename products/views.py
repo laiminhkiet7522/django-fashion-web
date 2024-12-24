@@ -4,10 +4,11 @@ from category.models import Category
 from carts.models import CartItem
 from django.http import HttpResponse
 from carts.views import _cart_id
+from django.db.models import Q
+from unidecode import unidecode
 
 
 def store(request, category_slug=None):
-    # Khởi tạo biến sản phẩm và danh mục
     categories = None
     products = None
 
@@ -25,7 +26,7 @@ def store(request, category_slug=None):
     # Đếm số sản phẩm được tìm thấy
     product_count = products.count()
 
-    # Kết hợp sản phẩm với ảnh chính (is_main=True) và ảnh tiếp theo
+    # Kết hợp sản phẩm với ảnh chính (is_main=True) và ảnh tiếp theo ảnh chính
     products_with_images = [
         {
             "product": product,
@@ -42,6 +43,7 @@ def store(request, category_slug=None):
     context = {
         "products_with_images": products_with_images,
         "product_count": product_count,
+        "category_slug": category_slug,
     }
     return render(request, "store/store.html", context)
 
@@ -68,3 +70,47 @@ def product_detail(request, category_slug, product_slug):
     }
 
     return render(request, "store/product_detail.html", context)
+
+
+from django.db.models import Q
+from django.shortcuts import render
+
+
+from django.db.models import Q
+
+
+def search(request):
+    products = []
+    product_count = 0
+
+    if "keyword" in request.GET:
+        keyword = request.GET["keyword"].strip()  # Loại bỏ khoảng trắng thừa
+        if keyword:
+            # Viết hoa chữ cái đầu mỗi từ
+            formatted_keyword = keyword.title()
+
+            # Sử dụng icontains để tìm kiếm không phân biệt chữ hoa, chữ thường
+            products = Product.objects.order_by("-created_at").filter(
+                Q(product_name__icontains=formatted_keyword)
+            )
+            product_count = products.count()
+
+    # Kết hợp sản phẩm với ảnh chính (is_main=True) và ảnh tiếp theo ảnh chính
+    products_with_images = [
+        {
+            "product": product,
+            "main_image": ProductImage.objects.filter(
+                product=product, is_main=True
+            ).first(),
+            "next_image": ProductImage.objects.filter(product=product, is_main=False)
+            .order_by("id")
+            .first(),
+        }
+        for product in products
+    ]
+
+    context = {
+        "products_with_images": products_with_images,
+        "product_count": product_count,
+    }
+    return render(request, "store/store.html", context)
