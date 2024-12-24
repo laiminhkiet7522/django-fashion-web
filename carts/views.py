@@ -16,6 +16,7 @@ def _cart_id(request):
 
 
 def add_cart(request, product_id):
+    product = Product.objects.get(id=product_id)
     product_variation = []
     if request.method == "POST":
         for item in request.POST:
@@ -33,7 +34,6 @@ def add_cart(request, product_id):
             except:
                 pass
 
-    product = Product.objects.get(id=product_id)
     try:
         # Lấy giỏ hàng bằng cách sử dụng cart_id có trong session
         cart = Cart.objects.get(cart_id=_cart_id(request))

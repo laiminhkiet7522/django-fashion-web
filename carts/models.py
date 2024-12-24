@@ -1,5 +1,5 @@
 from django.db import models
-from products.models import Product
+from products.models import Product, Variation
 
 # Create your models here.
 
@@ -15,11 +15,12 @@ class Cart(models.Model):
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
+    variations = models.ManyToManyField(Variation, blank=True)
     quantity = models.IntegerField()
     is_active = models.BooleanField(default=True)
 
     def sub_total(self):
-        """Tính tổng tạm thời dựa trên giá giảm nếu có"""
+        # Tính tổng tạm thời dựa trên giá giảm nếu có
         price = (
             self.product.discount_price
             if self.product.discount_price
@@ -28,10 +29,13 @@ class CartItem(models.Model):
         return price * self.quantity
 
     def formatted_sub_total(self):
-        """Định dạng lại giá tạm tính theo tiền Việt Nam"""
+        # Định dạng lại giá tạm tính theo tiền Việt Nam
         price = (
             self.product.discount_price
             if self.product.discount_price
             else self.product.price
         )
         return f"{price * self.quantity:,}đ".replace(",", ".")
+
+    def __unicode__(self):
+        return self.product
