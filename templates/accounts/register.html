@@ -34,6 +34,7 @@
       <div class="col-lg-12">
         <h3>Tạo tài khoản mới</h3>
         <div class="theme-card">
+          {% include 'includes/alerts.html' %}
           <form class="theme-form" action="{% url 'register' %}" method="POST">
             {% csrf_token %}
 
@@ -82,4 +83,12 @@
   </div>
 </section>
 <!--Section ends-->
+{% block script %}
+<script>
+  setTimeout(function () {
+    $('#message').fadeOut('slow')
+  }, 4000)
+</script>
+{% endblock %}
+
 {% endblock %}
