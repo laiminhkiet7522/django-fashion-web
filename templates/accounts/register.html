@@ -39,36 +39,40 @@
 
             <div class="form-row row">
               <div class="col-md-6">
-                <label for="email">Họ và tên đệm</label>
+                <label for="email">Họ và tên đệm <span class="text-danger">*</span></label>
                 {{ form.first_name }}
               </div>
               <div class="col-md-6">
-                <label for="review">Tên</label>
+                <label for="review">Tên <span class="text-danger">*</span></label>
                 {{ form.last_name }}
               </div>
             </div>
 
             <div class="form-row row">
               <div class="col-md-6">
-                <label for="email">email</label>
+                <label for="email">Email <span class="text-danger">*</span></label>
                 {{ form.email }}
               </div>
               <div class="col-md-6">
-                <label for="review">Số điện thoại</label>
+                <label for="review">Số điện thoại <span class="text-danger">*</span></label>
                 {{ form.phone_number }}
               </div>
             </div>
 
             <div class="form-row row">
               <div class="col-md-6">
-                <label for="email">Mật khẩu</label>
+                <label for="email">Mật khẩu <span class="text-danger">*</span></label>
                 {{ form.password }}
               </div>
               <div class="col-md-6">
-                <label for="review">Nhập lại mật khẩu</label>
+                <label for="review">Nhập lại mật khẩu <span class="text-danger">*</span></label>
                 {{ form.confirm_password }}
+                <span class="text-danger">
+                  {{ form.email.errors }}
+                  {{ form.non_field_errors }}
+                </span>
               </div>
-              <button type="submit" class="btn btn-solid w-auto">Xác nhận</button>
+              <button type="submit" class="btn btn-solid w-auto">Xác nhận đăng ký</button>
             </div>
 
           </form>
