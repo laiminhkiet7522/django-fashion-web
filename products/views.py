@@ -71,6 +71,17 @@ def product_detail(request, category_slug, product_slug):
                 )
                 * 100
             )
+
+        # Sắp xếp danh sách size theo thứ tự cố định
+        sizes_order = ["S", "M", "L", "XL"]
+        sorted_sizes = sorted(
+            single_product.variation_set.sizes(),
+            key=lambda x: (
+                sizes_order.index(x.variation_value)
+                if x.variation_value in sizes_order
+                else float("inf")
+            ),
+        )
     except Exception as e:
         raise e
 
@@ -79,6 +90,7 @@ def product_detail(request, category_slug, product_slug):
         "in_cart": in_cart,
         "product_images": product_images,
         "discount_percentage": discount_percentage,
+        "sorted_sizes": sorted_sizes,
     }
 
     return render(request, "store/product_detail.html", context)

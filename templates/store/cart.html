@@ -70,33 +70,43 @@ Giỏ hàng của bạn
               </td>
               <td><a href="{{ item.product_url }}">{{ item.cart_item.product.product_name }}</a>
                 <p>
-                  {% if item.cart_item.variations.all %}
-                    {% for item in item.cart_item.variations.all %}
-                      {{ item.variation_category }} : {{ item.variation_value }} <br>
-                    {% endfor %}
+                  {% if item.sorted_variations %}
+                  {% for variation in item.sorted_variations %}
+                  {{ variation.variation_category }} : {{ variation.variation_value }} <br>
+                  {% endfor %}
                   {% endif %}
                 </p>
                 <div class="mobile-cart-content row">
                   <div class="input-group input-spinner"
-                    style="width: 40%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+                    style="width: 80%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                     <div class="input-group-prepend">
-                      <a href="{% url 'remove_cart' item.cart_item.product.id %}" class="btn" type="button"
-                        id="button-minus"
-                        style="width: 20px; height: 20px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa fa-minus"></i>
-                      </a>
+                      <form method="POST" action="{% url 'remove_cart' item.cart_item.product.id %}" style="margin: 0;">
+                        {% csrf_token %}
+                        {% for variation in item.cart_item.variations.all %}
+                        <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
+                        {% endfor %}
+                        <button type="submit" class="btn" id="button-minus"
+                          style="width: 20px; height: 20px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                          <i class="fa fa-minus"></i>
+                        </button>
+                      </form>
                     </div>
                     <input readonly type="text" class="form-control" value="{{ item.cart_item.quantity }}"
-                      style="width: 20px; height: 20px; text-align: center; vertical-align: middle; line-height: 20px;">
+                      style="width: 50%; height: 20px; text-align: center; vertical-align: middle; line-height: 20px;">
                     <div class="input-group-append">
-                      <a href="{% url 'add_cart' item.cart_item.product.id %}" class="btn" type="button"
-                        id="button-plus"
-                        style="width: 20px; height: 20px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa fa-plus"></i>
-                      </a>
+                      <form method="POST" action="{% url 'increase_quantity' item.cart_item.product.id %}" style="margin: 0;">
+                        {% csrf_token %}
+                        {% for variation in item.cart_item.variations.all %}
+                        <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
+                        {% endfor %}
+                        <button type="submit" class="btn" id="button-plus"
+                          style="width: 20px; height: 20px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                          <i class="fa fa-plus"></i>
+                        </button>
+                      </form>
                     </div>
                   </div>
-                  <div class="col">
+                  <div class="col" style="margin-top: 10px;">
                     {% if item.cart_item.product.discount_price %}
                     <h2 class="td-color">{{ item.cart_item.product.formatted_discount_price }}</h2>
                     <span style="text-decoration: line-through; color: red;">
@@ -106,10 +116,17 @@ Giỏ hàng của bạn
                     <h2 class="td-color">{{ item.cart_item.product.formatted_price }}</h2>
                     {% endif %}
                   </div>
-                  <div class="col">
-                    <h2 class="td-color"><a href="{% url 'remove_cart_item' item.cart_item.product.id %}"
-                        class="icon"><i class="ti-close"></i></a>
-                    </h2>
+                  <div class="col" style="margin-top: 10px;">
+                    <form method="POST" action="{% url 'remove_cart_item' item.cart_item.product.id %}" style="margin: 0;">
+                      {% csrf_token %}
+                      <!-- Gửi các variations (nếu có) -->
+                      {% for variation in item.cart_item.variations.all %}
+                      <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
+                      {% endfor %}
+                      <button type="submit" class="icon" style="background: none; border: none; cursor: pointer;">
+                        <i class="ti-close"></i>
+                      </button>
+                    </form>
                   </div>
                 </div>
               </td>
@@ -127,24 +144,44 @@ Giỏ hàng của bạn
                 <div class="input-group input-spinner"
                   style="width: 80%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                   <div class="input-group-prepend">
-                    <a href="{% url 'remove_cart' item.cart_item.product.id %}" class="btn" type="button"
-                      id="button-minus"
-                      style="width: 40px; height: 40px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
-                      <i class="fa fa-minus"></i>
-                    </a>
+                    <form method="POST" action="{% url 'remove_cart' item.cart_item.product.id %}" style="margin: 0;">
+                      {% csrf_token %}
+                      {% for variation in item.cart_item.variations.all %}
+                      <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
+                      {% endfor %}
+                      <button type="submit" class="btn" id="button-minus"
+                        style="width: 40px; height: 40px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-minus"></i>
+                      </button>
+                    </form>
                   </div>
                   <input readonly type="text" class="form-control" value="{{ item.cart_item.quantity }}"
                     style="width: 30px; height: 40px; text-align: center; vertical-align: middle; line-height: 40px;">
                   <div class="input-group-append">
-                    <a href="{% url 'add_cart' item.cart_item.product.id %}" class="btn" type="button" id="button-plus"
-                      style="width: 40px; height: 40px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
-                      <i class="fa fa-plus"></i>
-                    </a>
+                    <form method="POST" action="{% url 'increase_quantity' item.cart_item.product.id %}" style="margin: 0;">
+                      {% csrf_token %}
+                      {% for variation in item.cart_item.variations.all %}
+                      <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
+                      {% endfor %}
+                      <button type="submit" class="btn" id="button-plus"
+                        style="width: 40px; height: 40px; background-color: rgb(254, 129, 109); color: white; border: none; padding: 5px 10px; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </form>
                   </div>
                 </div>
               </td>
-              <td><a href="{% url 'remove_cart_item' item.cart_item.product.id %}" class="icon"><i
-                    class="ti-close"></i></a></td>
+              <td>
+                <form method="POST" action="{% url 'remove_cart_item' item.cart_item.product.id %}" style="margin: 0;">
+                  {% csrf_token %}
+                  {% for variation in item.cart_item.variations.all %}
+                  <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
+                  {% endfor %}
+                  <button type="submit" class="icon" style="background: none; border: none; cursor: pointer;">
+                    <i class="ti-close"></i>
+                  </button>
+                </form>
+              </td>
               <td>
                 <h2 class="td-color">{{ item.cart_item.formatted_sub_total }}</h2>
               </td>

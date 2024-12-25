@@ -131,8 +131,8 @@
                   <ul>
                     <select name="size" class="form-control" required>
                       <option value="" disabled selected>Chọn size áo</option>
-                      {% for i in single_product.variation_set.sizes %}
-                      <option value="{{ i.variation_value | upper }}">{{ i.variation_value | upper }}</option>
+                      {% for size in sorted_sizes %}
+                      <option value="{{ size.variation_value | upper }}">{{ size.variation_value | upper }}</option>
                       {% endfor %}
                     </select>
                   </ul>

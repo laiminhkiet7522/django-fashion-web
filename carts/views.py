@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from products.models import Product, Variation
 from .models import Cart, CartItem
-from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 import locale
 
@@ -83,26 +82,109 @@ def add_cart(request, product_id):
     return redirect("cart")
 
 
-def remove_cart(request, product_id):
-
+def increase_quantity(request, product_id):
     cart = Cart.objects.get(cart_id=_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
-    cart_item = CartItem.objects.get(product=product, cart=cart)
 
-    if cart_item.quantity > 1:
-        cart_item.quantity -= 1
-        cart_item.save()
+    # Lấy danh sách tất cả CartItem liên quan đến product và cart hiện tại
+    cart_items = CartItem.objects.filter(product=product, cart=cart)
+
+    # Tìm đúng CartItem dựa trên variations
+    product_variation = []
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            try:
+                variation = Variation.objects.get(
+                    product=product,
+                    variation_category__iexact=key,
+                    variation_value__iexact=value,
+                )
+                product_variation.append(variation)
+            except Variation.DoesNotExist:
+                pass
+
+    for cart_item in cart_items:
+        existing_variation = list(cart_item.variations.all())
+        if set(existing_variation) == set(product_variation):
+            # Nếu tìm thấy CartItem phù hợp, tăng số lượng
+            if cart_item.quantity < 99:  # Giới hạn tối đa
+                cart_item.quantity += 1
+                cart_item.save()
+            break
     else:
-        cart_item.delete()
+        # Nếu không tìm thấy, tạo mới một CartItem với các variations tương ứng
+        new_cart_item = CartItem.objects.create(product=product, quantity=1, cart=cart)
+        if product_variation:
+            new_cart_item.variations.set(product_variation)
+        new_cart_item.save()
+
+    return redirect("cart")
+
+
+def remove_cart(request, product_id):
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    product = get_object_or_404(Product, id=product_id)
+
+    # Lấy danh sách tất cả CartItem liên quan đến product và cart hiện tại
+    cart_items = CartItem.objects.filter(product=product, cart=cart)
+
+    # Tìm đúng CartItem dựa trên variations
+    product_variation = []
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            try:
+                variation = Variation.objects.get(
+                    product=product,
+                    variation_category__iexact=key,
+                    variation_value__iexact=value,
+                )
+                product_variation.append(variation)
+            except Variation.DoesNotExist:
+                pass
+
+    for cart_item in cart_items:
+        existing_variation = list(cart_item.variations.all())
+        if set(existing_variation) == set(product_variation):
+            # Nếu tìm thấy CartItem phù hợp, giảm số lượng
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+                cart_item.save()
+            else:
+                # Nếu số lượng là 1, xóa CartItem
+                cart_item.delete()
+            break
+
     return redirect("cart")
 
 
 def remove_cart_item(request, product_id):
     cart = Cart.objects.get(cart_id=_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
-    cart_item = CartItem.objects.get(product=product, cart=cart)
 
-    cart_item.delete()
+    # Lấy danh sách các CartItem liên quan đến product và cart hiện tại
+    cart_items = CartItem.objects.filter(product=product, cart=cart)
+
+    # Xác định đúng CartItem dựa trên variations từ POST
+    product_variation = []
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            try:
+                variation = Variation.objects.get(
+                        product=product,
+                        variation_category__iexact=key,
+                        variation_value__iexact=value,
+                    )
+                product_variation.append(variation)
+            except Variation.DoesNotExist:
+                pass
+
+    for cart_item in cart_items:
+        existing_variation = list(cart_item.variations.all())
+        if set(existing_variation) == set(product_variation):
+            # Nếu tìm thấy CartItem phù hợp, xóa nó
+            cart_item.delete()
+            break
+
     return redirect("cart")
 
 
@@ -128,22 +210,30 @@ def cart(request, total=0, quantity=0, cart_items=None):
             # Gọi hàm get_url từ product và thêm vào context
             product_url = cart_item.product.get_url()
 
+            # Lấy hình ảnh chính của sản phẩm
             main_image = cart_item.product.images.filter(is_main=True).first()
+
+            # Sắp xếp variations theo variation_category (Color trước, Size sau)
+            sorted_variations = cart_item.variations.all().order_by(
+                "variation_category"
+            )
+
             cart_items_with_images.append(
                 {
                     "cart_item": cart_item,
                     "main_image": main_image.image.url if main_image else None,
                     "product_url": product_url,
+                    "sorted_variations": sorted_variations,
                 }
             )
 
-        # Nếu đơn hàng có giá trị nhỏ hơn bằng 200.000đ thì tính phí vận chuyển là 25.000đ
+        # Nếu tổng giá trị <= 200.000đ thì tính phí vận chuyển 25.000đ
         if total <= 200000:
             shipping_fee = 25000
 
         grand_total = total + shipping_fee
 
-        # Định dạng lại theo hiển thị kiểu tiền Việt Nam
+        # Định dạng lại theo tiền Việt Nam
         locale.setlocale(locale.LC_ALL, "vi_VN.UTF-8")
         formatted_total = locale.format_string("%d", total, grouping=True) + "đ"
         formatted_grand_total = (
