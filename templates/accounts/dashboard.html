@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Quản lý tài khoản
+{% endblock %}
+
+{% block content %}
+
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Quản lý tài khoản</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Đăng nhập</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+
+
+<!--  dashboard section start -->
+<section class="dashboard-section section-b-space user-dashboard-section">
+  <div class="container">
+    {% include 'includes/alerts.html' %}
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="dashboard-sidebar">
+          <div class="profile-top">
+            <div class="profile-image">
+              <img src="../assets/images/avtar.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="profile-detail">
+              <h5>Mark Jecno</h5>
+              <h6>mark.jecno@mail.com</h6>
+            </div>
+          </div>
+          <div class="faq-tab">
+            <ul class="nav nav-tabs" id="top-tab" role="tablist">
+              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#info" class="nav-link active">Thông tin chung</a></li>
+              </li>
+              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#orders" class="nav-link">Quản lý đơn hàng</a></li>
+              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#profile" class="nav-link">Thay đổi thông tin</a></li>
+              <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Đăng xuất</a> </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="faq-content tab-content" id="top-tabContent">
+          <div class="tab-pane fade show active" id="info">
+            <div class="counter-section">
+              <div class="welcome-msg">
+                <h4>Xin chào, {{ user.first_name }} {{ user.last_name }} !</h4>
+                <p>Tại đây, bạn có thể xem và cập nhật
+                thông tin tài khoản. Chọn liên kết bên dưới để xem hoặc chỉnh sửa thông tin.</p>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="counter-box">
+                    <img src="{% static '/images/icon/dashboard/sale.png' %}" class="img-fluid">
+                    <div>
+                      <h3>25</h3>
+                      <h5>Tổng đơn hàng</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="counter-box">
+                    <img src="{% static '/images/icon/dashboard/order.png' %}" class="img-fluid">
+                    <div>
+                      <h3>50</h3>
+                      <h5>Yêu thích</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="orders">
+            <div class="row">
+              <div class="col-12">
+                <div class="card dashboard-table mt-0">
+                  <div class="card-body table-responsive-sm">
+                    <div class="top-sec">
+                      <h3>My Orders</h3>
+                    </div>
+                    <div class="table-responsive-xl">
+                      <table class="table cart-table order-table">
+                        <thead>
+                          <tr class="table-head">
+                            <th scope="col">image</th>
+                            <th scope="col">Order Id</th>
+                            <th scope="col">Product Details</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">View</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <img src="../assets/images/pro3/1.jpg" class="blur-up lazyloaded" alt="">
+                              </a>
+                            </td>
+                            <td>
+                              <span class="mt-0">#125021</span>
+                            </td>
+                            <td>
+                              <span class="fs-6">Purple polo tshirt</span>
+                            </td>
+                            <td>
+                              <span class="badge rounded-pill bg-success custom-badge">Shipped</span>
+                            </td>
+                            <td>
+                              <span class="theme-color fs-6">$49.54</span>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <i class="fa fa-eye text-theme"></i>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <img src="../assets/images/pro3/2.jpg" class="blur-up lazyloaded" alt="">
+                              </a>
+                            </td>
+                            <td>
+                              <span class="mt-0">#125367</span>
+                            </td>
+                            <td>
+                              <span class="fs-6">Sleevless white top</span>
+                            </td>
+                            <td>
+                              <span class="badge rounded-pill bg-danger custom-badge">Pending</span>
+                            </td>
+                            <td>
+                              <span class="theme-color fs-6">$49.54</span>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <i class="fa fa-eye text-theme"></i>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <img src="../assets/images/pro3/27.jpg" class="blur-up lazyloaded" alt="">
+                              </a>
+                            </td>
+                            <td>
+                              <p>#125948</p>
+                            </td>
+                            <td>
+                              <p class="fs-6">multi color polo tshirt</p>
+                            </td>
+                            <td>
+                              <span class="badge rounded-pill bg-success custom-badge">Shipped</span>
+                            </td>
+                            <td>
+                              <p class="theme-color fs-6">$49.54</p>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <i class="fa fa-eye text-theme"></i>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <img src="../assets/images/pro3/28.jpg" class="blur-up lazyloaded" alt="">
+                              </a>
+                            </td>
+                            <td>
+                              <p>#127569</p>
+                            </td>
+                            <td>
+                              <p class="fs-6">Candy red solid tshirt</p>
+                            </td>
+                            <td>
+                              <span class="badge rounded-pill bg-success custom-badge">Shipped</span>
+                            </td>
+                            <td>
+                              <p class="theme-color fs-6">$49.54</p>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <i class="fa fa-eye text-theme"></i>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <img src="../assets/images/pro3/33.jpg" class="blur-up lazyloaded" alt="">
+                              </a>
+                            </td>
+                            <td>
+                              <p>#125753</p>
+                            </td>
+                            <td>
+                              <p class="fs-6">multicolored polo tshirt</p>
+                            </td>
+                            <td>
+                              <span class="badge rounded-pill bg-secondary custom-badge">Canceled</span>
+                            </td>
+                            <td>
+                              <p class="theme-color fs-6">$49.54</p>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <i class="fa fa-eye text-theme"></i>
+                              </a>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <img src="../assets/images/pro3/34.jpg" class="blur-up lazyloaded" alt="">
+                              </a>
+                            </td>
+                            <td>
+                              <span>#125021</span>
+                            </td>
+                            <td>
+                              <span class="fs-6">Men's Sweatshirt</span>
+                            </td>
+                            <td>
+                              <span class="badge rounded-pill bg-secondary custom-badge">Canceled</span>
+                            </td>
+                            <td>
+                              <span class="theme-color fs-6">$49.54</span>
+                            </td>
+                            <td>
+                              <a href="javascript:void(0)">
+                                <i class="fa fa-eye text-theme"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="profile">
+            <div class="row">
+              <div class="col-12">
+                <div class="card mt-0">
+                  <div class="card-body">
+                    <div class="dashboard-box">
+                      <div class="dashboard-title">
+                        <h4>profile</h4>
+                        <a class="edit-link" href="#">edit</a>
+                      </div>
+                      <div class="dashboard-detail">
+                        <ul>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>company name</h6>
+                              </div>
+                              <div class="right">
+                                <h6>Fashion Store</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>email address</h6>
+                              </div>
+                              <div class="right">
+                                <h6>mark.jecno@gmail.com</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>Country / Region</h6>
+                              </div>
+                              <div class="right">
+                                <h6>Downers Grove, IL</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>Year Established</h6>
+                              </div>
+                              <div class="right">
+                                <h6>2018</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>Total Employees</h6>
+                              </div>
+                              <div class="right">
+                                <h6>101 - 200 People</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>category</h6>
+                              </div>
+                              <div class="right">
+                                <h6>clothing</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>street address</h6>
+                              </div>
+                              <div class="right">
+                                <h6>549 Sulphur Springs Road</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>city/state</h6>
+                              </div>
+                              <div class="right">
+                                <h6>Downers Grove, IL</h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>zip</h6>
+                              </div>
+                              <div class="right">
+                                <h6>60515</h6>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="dashboard-title mt-lg-5 mt-3">
+                        <h4>login details</h4>
+                        <a class="edit-link" href="#">edit</a>
+                      </div>
+                      <div class="dashboard-detail">
+                        <ul>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>Email Address</h6>
+                              </div>
+                              <div class="right">
+                                <h6>mark.jecno@gmail.com <a class="edit-link" href="#">edit</a></h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>Phone No.</h6>
+                              </div>
+                              <div class="right">
+                                <h6>+01 4485 5454<a class="edit-link" href="#">Edit</a></h6>
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="details">
+                              <div class="left">
+                                <h6>Password</h6>
+                              </div>
+                              <div class="right">
+                                <h6>******* <a class="edit-link" href="#">Edit</a>
+                                </h6>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--  dashboard section end -->
+
+{% block script %}
+<script>
+  setTimeout(function () {
+    $('#message').fadeOut('slow')
+  }, 5000)
+</script>
+{% endblock %}
+
+{% endblock %}

@@ -10,6 +10,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
+
 # Create your views here.
 def register(request):
     if request.method == "POST":
@@ -46,8 +47,7 @@ def register(request):
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            return redirect('/accounts/login/?command=verification&email='+email)
-
+            return redirect("/accounts/login/?command=verification&email=" + email)
 
     else:
         form = RegistrationForm()
@@ -66,8 +66,8 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            # messages.success(request, "Đăng nhập thành công.")
-            return redirect('home')
+            messages.success(request, "Đăng nhập thành công.")
+            return redirect("dashboard")
         else:
             messages.error(request, "Thông tin đăng nhập không hợp lệ.")
             return redirect("login")
@@ -97,3 +97,8 @@ def activate(request, uidb64, token):
     else:
         messages.error(request, "Có lỗi xảy ra vui lòng thử lại.")
         return redirect("register")
+
+
+@login_required(login_url="login")
+def dashboard(request):
+    return render(request, "accounts/dashboard.html")
