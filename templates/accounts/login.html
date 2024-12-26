@@ -28,6 +28,16 @@
 </div>
 <!-- breadcrumb End -->
 
+{% if request.GET.command == 'verification' %}
+
+<div class="container mx-auto alert alert-info text-center" role="alert" style="max-width: 1024px; margin-top:100px;">
+  Cảm ơn bạn đã đăng ký tài khoản. Chúng tôi đã gửi cho bạn một email xác minh đến địa chỉ email của bạn
+  [{{request.GET.email}}]. <br><br>Vui lòng nhấp vào link đính kèm để tiến hành xác thực tài khoản.
+  <br><br>
+  Đã xác thực rồi? <a href="{% url 'login' %}">Đăng nhập ngay</a>
+</div>
+
+{% else %}
 
 <!--section start-->
 <section class="login-page section-b-space">
@@ -36,7 +46,9 @@
       <div class="col-lg-6">
         <h3>Thông tin đăng nhập</h3>
         <div class="theme-card">
+
           {% include 'includes/alerts.html' %}
+
           <form class="theme-form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -65,7 +77,6 @@
   </div>
 </section>
 <!--Section ends-->
-
 {% block script %}
 <script>
   setTimeout(function () {
@@ -73,5 +84,7 @@
   }, 5000)
 </script>
 {% endblock %}
+
+{% endif %}
 
 {% endblock %}
