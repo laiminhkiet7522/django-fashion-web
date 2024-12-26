@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegistrationForm
 from .models import Account
-from django.contrib import messages
+from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -25,7 +26,7 @@ def register(request):
             user.phone_number = phone_number
             user.save()
             messages.success(request, "Đăng ký tài khoản thành công!")
-            return redirect('register')
+            return redirect("register")
 
     else:
         form = RegistrationForm()
@@ -36,8 +37,25 @@ def register(request):
 
 
 def login(request):
+    if request.method == "POST":
+        email = request.POST["email"]
+        password = request.POST["password"]
+
+        user = auth.authenticate(email=email, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            # messages.success(request, "Đăng nhập thành công.")
+            return redirect('home')
+        else:
+            messages.error(request, "Thông tin đăng nhập không hợp lệ.")
+            return redirect("login")
+
     return render(request, "accounts/login.html")
 
 
+@login_required(login_url="login")
 def logout(request):
-    return
+    auth.logout(request)
+    messages.success(request, "Đăng xuất thành công.")
+    return redirect("login")

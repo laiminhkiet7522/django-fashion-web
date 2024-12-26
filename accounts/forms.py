@@ -61,6 +61,11 @@ class RegistrationForm(forms.ModelForm):
             "077",
             "076",
             "078",  # Mobifone
+            "052",
+            "056",
+            "058",  # Vietnamobile,
+            "059",
+            "099",  # Gmobile,
         ]
 
         if not re.match(r"^\d{10}$", phone_number):

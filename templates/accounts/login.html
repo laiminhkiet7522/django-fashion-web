@@ -1,1 +1,77 @@
-<h1>login</h1>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Đăng nhập tài khoản
+{% endblock %}
+
+{% block content %}
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Đăng nhập tài khoản</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Đăng nhập</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+
+
+<!--section start-->
+<section class="login-page section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <h3>Thông tin đăng nhập</h3>
+        <div class="theme-card">
+          {% include 'includes/alerts.html' %}
+          <form class="theme-form" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="text" class="form-control" placeholder="Nhập vào email . . ." name="email" required="">
+            </div>
+            <div class="form-group">
+              <label for="password">Mật khẩu</label>
+              <input type="password" class="form-control" placeholder="Nhập vào mật khẩu . . ." name="password"
+                required="">
+            </div>
+            <button type="submit" class="btn btn-solid">Đăng nhập</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-6 right-login">
+        <h3>Bạn chưa có tài khoản?</h3>
+        <div class="theme-card authentication-right">
+          <h6 class="title-font">Đăng ký tài khoản</h6>
+          <p>Đăng ký tài khoản miễn phí tại cửa hàng của chúng tôi. Đăng ký nhanh chóng và dễ dàng. Nó cho phép bạn có
+            thể đặt hàng từ cửa hàng của chúng tôi. Để bắt đầu mua sắm, hãy nhấp vào đăng ký.</p><a
+            href="{% url 'register' %}" class="btn btn-solid">Đăng ký</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Section ends-->
+
+{% block script %}
+<script>
+  setTimeout(function () {
+    $('#message').fadeOut('slow')
+  }, 5000)
+</script>
+{% endblock %}
+
+{% endblock %}

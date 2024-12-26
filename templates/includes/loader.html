@@ -13,13 +13,33 @@
             </div>
           </div>
           <div class="col-lg-6 text-end">
+
+            {% if user.id is None %}
             <ul class="header-dropdown">
               <li class="mobile-wishlist"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>
                   Yêu thích</a></li>
               <li class="onhover-dropdown mobile-account"> <i class="fa fa-user" aria-hidden="true"></i>
                 Tài khoản
+                <ul class="onhover-show-div">
+                  <li><a href="{% url 'login' %}">Đăng nhập</a></li>
+                  <li><a href="{% url 'register' %}">Đăng ký</a></li>
+                </ul>
               </li>
             </ul>
+            {% else %}
+            <ul class="header-dropdown">
+              <li class="mobile-wishlist"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>
+                  Yêu thích</a></li>
+              <li class="onhover-dropdown mobile-account"> <i class="fa fa-user" aria-hidden="true"></i>
+                Xin chào {{ user.last_name }}!
+                <ul class="onhover-show-div">
+                  <li><a href="#">Tài khoản</a></li>
+                  <li><a href="{% url 'logout' %}">Đăng xuất</a></li>
+                </ul>
+              </li>
+            </ul>
+            {% endif %}
+
           </div>
         </div>
       </div>
