@@ -102,3 +102,80 @@ def activate(request, uidb64, token):
 @login_required(login_url="login")
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
+
+
+def forgotPassword(request):
+    if request.method == "POST":
+        email = request.POST["email"]
+        if Account.objects.filter(email=email).exists():
+            user = Account.objects.get(email__exact=email)
+
+            current_site = get_current_site(request)
+            mail_subject = "Đặt lại mật khẩu"
+            message = render_to_string(
+                "accounts/reset_password_email.html",
+                {
+                    "user": user,
+                    "domain": current_site,
+                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "token": default_token_generator.make_token(user),
+                },
+            )
+            to_email = email
+            send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email.send()
+
+            messages.success(
+                request,
+                "Yêu cầu đặt lại mật khẩu đã được gửi đến địa chỉ email của bạn. Vui lòng kiểm tra trong hộp thư đến (kể cả hộp thư rác).",
+            )
+            return redirect("forgotPassword")
+        else:
+            messages.error(
+                request, "Tài khoản không tồn tại. Vui lòng kiểm tra và thử lại!"
+            )
+            return redirect("forgotPassword")
+    return render(request, "accounts/forgot_password.html")
+
+
+def reset_password_validate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Account.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        request.session["uid"] = uid
+        messages.success(request, "Bây giờ bạn có thể đặt lại mật khẩu mới.")
+        return redirect("resetPassword")
+    else:
+        messages.error(request, "Link này đã hết hạn. Vui lòng thực hiện lại!")
+        return redirect("login")
+
+
+def resetPassword(request):
+    if request.method == "POST":
+        password = request.POST["password"]
+        confirm_password = request.POST["confirm_password"]
+
+        if len(password) < 6:
+            messages.error(request, "Mật khẩu phải dài ít nhất 6 ký tự.")
+            return redirect("resetPassword")
+
+        if password == confirm_password:
+            uid = request.session.get("uid")
+            try:
+                user = Account.objects.get(pk=uid)
+                user.set_password(password)
+                user.save()
+                messages.success(request, "Mật khẩu đã được đặt lại thành công.")
+                return redirect("login")
+            except Account.DoesNotExist:
+                messages.error(request, "Không tìm thấy người dùng.")
+                return redirect("resetPassword")
+        else:
+            messages.error(request, "Hai mật khẩu bạn nhập không giống nhau!")
+            return redirect("resetPassword")
+    else:
+        return render(request, "accounts/reset_password.html")
