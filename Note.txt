@@ -12,6 +12,8 @@ winpty python manage.py createsuperuser
 
 pip install django-ckeditor
 
+pip install requests
+
 Khi dùng kiểu dữ liệu ImageField thì phải chạy lệnh "pip install pillow"
 
 Cách xóa hết Migrations và chạy lại:
