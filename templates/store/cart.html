@@ -68,7 +68,7 @@ Giỏ hàng của bạn
               <td>
                 <a href="{{ item.product_url }}"><img src="{{ item.main_image  }}" alt=""></a>
               </td>
-              <td><a href="{{ item.product_url }}">{{ item.cart_item.product.product_name }}</a>
+              <td><a href="{{ item.product_url }}" style="color: black;">{{ item.cart_item.product.product_name }}</a>
                 <p>
                   {% if item.sorted_variations %}
                   {% for variation in item.sorted_variations %}
@@ -80,7 +80,7 @@ Giỏ hàng của bạn
                   <div class="input-group input-spinner"
                     style="width: 80%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                     <div class="input-group-prepend">
-                      <form method="POST" action="{% url 'remove_cart' item.cart_item.product.id %}" style="margin: 0;">
+                      <form method="POST" action="{% url 'decrease_quantity' item.cart_item.product.id item.cart_item.id %}" style="margin: 0;">
                         {% csrf_token %}
                         {% for variation in item.cart_item.variations.all %}
                         <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
@@ -94,7 +94,7 @@ Giỏ hàng của bạn
                     <input readonly type="text" class="form-control" value="{{ item.cart_item.quantity }}"
                       style="width: 50%; height: 20px; text-align: center; vertical-align: middle; line-height: 20px;">
                     <div class="input-group-append">
-                      <form method="POST" action="{% url 'increase_quantity' item.cart_item.product.id %}" style="margin: 0;">
+                      <form method="POST" action="{% url 'increase_quantity' item.cart_item.product.id item.cart_item.id %}" style="margin: 0;">
                         {% csrf_token %}
                         {% for variation in item.cart_item.variations.all %}
                         <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
@@ -117,7 +117,7 @@ Giỏ hàng của bạn
                     {% endif %}
                   </div>
                   <div class="col" style="margin-top: 10px;">
-                    <form method="POST" action="{% url 'remove_cart_item' item.cart_item.product.id %}" style="margin: 0;">
+                    <form method="POST" action="{% url 'remove_cart_item' item.cart_item.product.id item.cart_item.id %}" style="margin: 0;">
                       {% csrf_token %}
                       <!-- Gửi các variations (nếu có) -->
                       {% for variation in item.cart_item.variations.all %}
@@ -144,7 +144,7 @@ Giỏ hàng của bạn
                 <div class="input-group input-spinner"
                   style="width: 80%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                   <div class="input-group-prepend">
-                    <form method="POST" action="{% url 'remove_cart' item.cart_item.product.id %}" style="margin: 0;">
+                    <form method="POST" action="{% url 'decrease_quantity' item.cart_item.product.id item.cart_item.id %}" style="margin: 0;">
                       {% csrf_token %}
                       {% for variation in item.cart_item.variations.all %}
                       <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
@@ -158,7 +158,7 @@ Giỏ hàng của bạn
                   <input readonly type="text" class="form-control" value="{{ item.cart_item.quantity }}"
                     style="width: 30px; height: 40px; text-align: center; vertical-align: middle; line-height: 40px;">
                   <div class="input-group-append">
-                    <form method="POST" action="{% url 'increase_quantity' item.cart_item.product.id %}" style="margin: 0;">
+                    <form method="POST" action="{% url 'increase_quantity' item.cart_item.product.id item.cart_item.id %}" style="margin: 0;">
                       {% csrf_token %}
                       {% for variation in item.cart_item.variations.all %}
                       <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">
@@ -172,7 +172,7 @@ Giỏ hàng của bạn
                 </div>
               </td>
               <td>
-                <form method="POST" action="{% url 'remove_cart_item' item.cart_item.product.id %}" style="margin: 0;">
+                <form method="POST" action="{% url 'remove_cart_item' item.cart_item.product.id item.cart_item.id %}" style="margin: 0;">
                   {% csrf_token %}
                   {% for variation in item.cart_item.variations.all %}
                   <input type="hidden" name="{{ variation.variation_category }}" value="{{ variation.variation_value }}">

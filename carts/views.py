@@ -153,108 +153,135 @@ def add_cart(request, product_id):
         return redirect("cart")
 
 
-def increase_quantity(request, product_id):
-    cart = Cart.objects.get(cart_id=_cart_id(request))
+def increase_quantity(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
 
-    # Lấy danh sách tất cả CartItem liên quan đến product và cart hiện tại
-    cart_items = CartItem.objects.filter(product=product, cart=cart)
+    try:
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(
+                product=product, user=request.user, id=cart_item_id
+            )
 
-    # Tìm đúng CartItem dựa trên variations
-    product_variation = []
-    if request.method == "POST":
-        for key, value in request.POST.items():
-            try:
-                variation = Variation.objects.get(
-                    product=product,
-                    variation_category__iexact=key,
-                    variation_value__iexact=value,
-                )
-                product_variation.append(variation)
-            except Variation.DoesNotExist:
-                pass
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(product=product, cart=cart)
 
-    for cart_item in cart_items:
-        existing_variation = list(cart_item.variations.all())
-        if set(existing_variation) == set(product_variation):
-            # Nếu tìm thấy CartItem phù hợp, tăng số lượng
-            if cart_item.quantity < 99:  # Giới hạn tối đa
-                cart_item.quantity += 1
-                cart_item.save()
-            break
-    else:
-        # Nếu không tìm thấy, tạo mới một CartItem với các variations tương ứng
-        new_cart_item = CartItem.objects.create(product=product, quantity=1, cart=cart)
-        if product_variation:
-            new_cart_item.variations.set(product_variation)
-        new_cart_item.save()
+        # Tìm đúng CartItem dựa trên variations
+        product_variation = []
+        if request.method == "POST":
+            for key, value in request.POST.items():
+                try:
+                    variation = Variation.objects.get(
+                        product=product,
+                        variation_category__iexact=key,
+                        variation_value__iexact=value,
+                    )
+                    product_variation.append(variation)
+                except Variation.DoesNotExist:
+                    pass
+
+        for cart_item in cart_items:
+            existing_variation = list(cart_item.variations.all())
+            if set(existing_variation) == set(product_variation):
+                # Nếu tìm thấy CartItem phù hợp, tăng số lượng
+                if cart_item.quantity < 99:  # Giới hạn tối đa
+                    cart_item.quantity += 1
+                    cart_item.save()
+                break
+        else:
+            # Nếu không tìm thấy, tạo mới một CartItem với các variations tương ứng
+            new_cart_item = CartItem.objects.create(
+                product=product, quantity=1, cart=cart
+            )
+            if product_variation:
+                new_cart_item.variations.set(product_variation)
+            new_cart_item.save()
+    except:
+        pass
 
     return redirect("cart")
 
 
-def remove_cart(request, product_id):
-    cart = Cart.objects.get(cart_id=_cart_id(request))
+def decrease_quantity(request, product_id, cart_item_id):
     product = get_object_or_404(Product, id=product_id)
 
-    # Lấy danh sách tất cả CartItem liên quan đến product và cart hiện tại
-    cart_items = CartItem.objects.filter(product=product, cart=cart)
+    try:
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(
+                product=product, user=request.user, id=cart_item_id
+            )
 
-    # Tìm đúng CartItem dựa trên variations
-    product_variation = []
-    if request.method == "POST":
-        for key, value in request.POST.items():
-            try:
-                variation = Variation.objects.get(
-                    product=product,
-                    variation_category__iexact=key,
-                    variation_value__iexact=value,
-                )
-                product_variation.append(variation)
-            except Variation.DoesNotExist:
-                pass
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(product=product, cart=cart)
 
-    for cart_item in cart_items:
-        existing_variation = list(cart_item.variations.all())
-        if set(existing_variation) == set(product_variation):
-            # Nếu tìm thấy CartItem phù hợp, giảm số lượng
-            if cart_item.quantity > 1:
-                cart_item.quantity -= 1
-                cart_item.save()
-            else:
-                # Nếu số lượng là 1, xóa CartItem
+        # Tìm đúng CartItem dựa trên variations
+        product_variation = []
+        if request.method == "POST":
+            for key, value in request.POST.items():
+                try:
+                    variation = Variation.objects.get(
+                        product=product,
+                        variation_category__iexact=key,
+                        variation_value__iexact=value,
+                    )
+                    product_variation.append(variation)
+                except Variation.DoesNotExist:
+                    pass
+
+        for cart_item in cart_items:
+            existing_variation = list(cart_item.variations.all())
+            if set(existing_variation) == set(product_variation):
+                # Nếu tìm thấy CartItem phù hợp, giảm số lượng
+                if cart_item.quantity > 1:
+                    cart_item.quantity -= 1
+                    cart_item.save()
+                else:
+                    # Nếu số lượng là 1, xóa CartItem
+                    cart_item.delete()
+                break
+    except:
+        pass
+
+    return redirect("cart")
+
+
+def remove_cart_item(request, product_id, cart_item_id):
+
+    product = get_object_or_404(Product, id=product_id)
+
+    try:
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.filter(
+                product=product, user=request.user, id=cart_item_id
+            )
+
+        else:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+            cart_items = CartItem.objects.filter(product=product, cart=cart)
+
+        # Xác định đúng CartItem dựa trên variations từ POST
+        product_variation = []
+        if request.method == "POST":
+            for key, value in request.POST.items():
+                try:
+                    variation = Variation.objects.get(
+                        product=product,
+                        variation_category__iexact=key,
+                        variation_value__iexact=value,
+                    )
+                    product_variation.append(variation)
+                except Variation.DoesNotExist:
+                    pass
+
+        for cart_item in cart_items:
+            existing_variation = list(cart_item.variations.all())
+            if set(existing_variation) == set(product_variation):
+                # Nếu tìm thấy CartItem phù hợp, xóa nó
                 cart_item.delete()
-            break
-
-    return redirect("cart")
-
-
-def remove_cart_item(request, product_id):
-    cart = Cart.objects.get(cart_id=_cart_id(request))
-    product = get_object_or_404(Product, id=product_id)
-
-    # Lấy danh sách các CartItem liên quan đến product và cart hiện tại
-    cart_items = CartItem.objects.filter(product=product, cart=cart)
-
-    # Xác định đúng CartItem dựa trên variations từ POST
-    product_variation = []
-    if request.method == "POST":
-        for key, value in request.POST.items():
-            try:
-                variation = Variation.objects.get(
-                    product=product,
-                    variation_category__iexact=key,
-                    variation_value__iexact=value,
-                )
-                product_variation.append(variation)
-            except Variation.DoesNotExist:
-                pass
-
-    for cart_item in cart_items:
-        existing_variation = list(cart_item.variations.all())
-        if set(existing_variation) == set(product_variation):
-            # Nếu tìm thấy CartItem phù hợp, xóa nó
-            cart_item.delete()
-            break
+                break
+    except:
+        pass
 
     return redirect("cart")
 
