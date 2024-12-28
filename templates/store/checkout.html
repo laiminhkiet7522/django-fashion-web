@@ -34,7 +34,8 @@ Thông tin nhận hàng
   <div class="container">
     <div class="checkout-page">
       <div class="checkout-form">
-        <form>
+        <form action="" method="POST">
+          {% csrf_token %}
           <div class="row">
             <div class="col-lg-6 col-sm-12 col-xs-12">
               <div class="checkout-title">
@@ -107,12 +108,13 @@ Thông tin nhận hàng
                     <li>Phí vận chuyển <span class="count">{{ formatted_shipping_fee }}</span></li>
                     <li>Tổng tiền phải trả <span class="count">{{ formatted_grand_total }}</span></li>
                   </ul>
-                  <div class="payment-box">
-                    <div class="text-end"><a href="#" class="btn-solid btn">Tiếp tục</a></div>
+                  <div class="payment-box" style="display: flex; justify-content: space-between;">
+                    <div><a href="{% url 'cart' %}" class="btn-solid btn">Quay lại</a></div>
+                    <div><button type="submit" class="btn-solid btn">Tiếp tục</button></div>
                   </div>
                 </div>
               </div>
-            </div>
+            </div>  
         </form>
       </div>
     </div>
