@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Thông tin nhận hàng
+{% endblock %}
+
+{% block content %}
+
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Thông tin nhận hàng</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Thông tin nhận hàng</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+
+<!-- section start -->
+<section class="section-b-space">
+  <div class="container">
+    <div class="checkout-page">
+      <div class="checkout-form">
+        <form>
+          <div class="row">
+            <div class="col-lg-6 col-sm-12 col-xs-12">
+              <div class="checkout-title">
+                <h3>Vui lòng điền đầy đủ thông tin nhận hàng</h3>
+              </div>
+              <div class="row check-out">
+                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                  <div class="field-label">Họ và tên đệm</div>
+                  <input type="text" name="first_name" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                  <div class="field-label">Tên</div>
+                  <input type="text" name="last_name" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                  <div class="field-label">Số điện thoại</div>
+                  <input type="text" name="phone_number" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                  <div class="field-label">Email</div>
+                  <input type="text" name="email" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                  <div class="field-label">Địa chỉ</div>
+                  <input type="text" name="address" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                  <div class="field-label">Tỉnh / Thành Phố</div>
+                  <input type="text" name="city" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-12 col-sm-6 col-xs-12">
+                  <div class="field-label">Quận / Huyện</div>
+                  <input type="text" name="district" value="" placeholder="" required>
+                </div>
+                <div class="form-group col-md-12 col-sm-6 col-xs-12">
+                  <div class="field-label">Xã / Phường / Thị Trấn</div>
+                  <input type="text" name="commune" value="" placeholder="" required>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-sm-12 col-xs-12">
+              <div class="checkout-details">
+                <div class="order-box">
+                  <div class="title-box">
+                    <div>Sản phẩm <span>Giá</span></div>
+                  </div>
+                  <ul class="qty">
+                    {% for item in cart_items %}
+                    <li>
+                      {{ item.cart_item.product.product_name }} × {{ item.cart_item.quantity }}<br>
+                      <p>
+                        {% if item.sorted_variations %}
+                        {% for variation in item.sorted_variations %}
+                        {{ variation.variation_category }} : {{ variation.variation_value }}<br>
+                        {% endfor %}
+                        {% endif %}
+                      </p>
+                      <span style="position: absolute; top: 0; right: 0;">
+                        {% if item.cart_item.product.discount_price %}
+                        {{ item.cart_item.product.formatted_discount_price }}/cái
+                        {% else %}
+                        {{ item.cart_item.product.formatted_price }}/cái
+                        {% endif %}
+                      </span>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  <ul class="sub-total">
+                    <li>Tạm tính <span class="count">{{ formatted_total }}</span></li>
+                    <li>Phí vận chuyển <span class="count">{{ formatted_shipping_fee }}</span></li>
+                    <li>Tổng tiền phải trả <span class="count">{{ formatted_grand_total }}</span></li>
+                  </ul>
+                  <div class="payment-box">
+                    <div class="text-end"><a href="#" class="btn-solid btn">Tiếp tục</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- section end -->
+
+{% endblock %}

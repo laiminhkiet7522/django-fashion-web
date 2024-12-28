@@ -170,10 +170,10 @@ def remove_cart_item(request, product_id):
         for key, value in request.POST.items():
             try:
                 variation = Variation.objects.get(
-                        product=product,
-                        variation_category__iexact=key,
-                        variation_value__iexact=value,
-                    )
+                    product=product,
+                    variation_category__iexact=key,
+                    variation_value__iexact=value,
+                )
                 product_variation.append(variation)
             except Variation.DoesNotExist:
                 pass
@@ -258,3 +258,75 @@ def cart(request, total=0, quantity=0, cart_items=None):
         "cart_items": cart_items_with_images,
     }
     return render(request, "store/cart.html", context)
+
+
+def checkout(request, total=0, quantity=0, cart_items=None):
+    try:
+        shipping_fee = 0
+        grand_total = 0
+
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+
+        cart_items_with_images = []
+
+        for cart_item in cart_items:
+            product_price = (
+                cart_item.product.discount_price
+                if cart_item.product.discount_price
+                else cart_item.product.price
+            )
+            total += product_price * cart_item.quantity
+            quantity += cart_item.quantity
+
+            # Gọi hàm get_url từ product và thêm vào context
+            product_url = cart_item.product.get_url()
+
+            # Lấy hình ảnh chính của sản phẩm
+            main_image = cart_item.product.images.filter(is_main=True).first()
+
+            # Sắp xếp variations theo variation_category (Color trước, Size sau)
+            sorted_variations = cart_item.variations.all().order_by(
+                "variation_category"
+            )
+
+            cart_items_with_images.append(
+                {
+                    "cart_item": cart_item,
+                    "main_image": main_image.image.url if main_image else None,
+                    "product_url": product_url,
+                    "sorted_variations": sorted_variations,
+                }
+            )
+
+        # Nếu tổng giá trị <= 200.000đ thì tính phí vận chuyển 25.000đ
+        if total <= 200000:
+            shipping_fee = 25000
+
+        grand_total = total + shipping_fee
+
+        # Định dạng lại theo tiền Việt Nam
+        locale.setlocale(locale.LC_ALL, "vi_VN.UTF-8")
+        formatted_total = locale.format_string("%d", total, grouping=True) + "đ"
+        formatted_grand_total = (
+            locale.format_string("%d", grand_total, grouping=True) + "đ"
+        )
+        formatted_shipping_fee = (
+            locale.format_string("%d", shipping_fee, grouping=True) + "đ"
+        )
+
+    except ObjectDoesNotExist:
+        cart_items_with_images = []
+        formatted_total = "0đ"
+        formatted_grand_total = "0đ"
+        formatted_shipping_fee = "0đ"
+
+    context = {
+        "total": total,
+        "formatted_total": formatted_total,
+        "formatted_grand_total": formatted_grand_total,
+        "formatted_shipping_fee": formatted_shipping_fee,
+        "quantity": quantity,
+        "cart_items": cart_items_with_images,
+    }
+    return render(request, "store/checkout.html", context)
