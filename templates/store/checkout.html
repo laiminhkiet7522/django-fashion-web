@@ -34,7 +34,7 @@ Thông tin nhận hàng
   <div class="container">
     <div class="checkout-page">
       <div class="checkout-form">
-        <form action="" method="POST">
+        <form action="{% url 'place_order' %}" method="POST">
           {% csrf_token %}
           <div class="row">
             <div class="col-lg-6 col-sm-12 col-xs-12">
