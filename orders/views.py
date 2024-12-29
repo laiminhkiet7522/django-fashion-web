@@ -8,6 +8,7 @@ import json
 from products.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+import locale
 
 
 def payments(request):
@@ -88,6 +89,7 @@ def place_order(
     current_user = request.user
     cart_items = CartItem.objects.filter(user=current_user)
     cart_count = cart_items.count()
+    cart_items_with_variations = []
 
     if cart_count <= 0:
         return redirect("store")
@@ -103,6 +105,17 @@ def place_order(
         )
         total += product_price * cart_item.quantity
         quantity += cart_item.quantity
+
+        # Sắp xếp variations theo variation_category (Color trước, Size sau)
+        sorted_variations = cart_item.variations.all().order_by("variation_category")
+
+        cart_items_with_variations.append(
+            {
+                "cart_item": cart_item,
+                "sorted_variations": sorted_variations,
+            }
+        )
+
     if total <= 200000:
         shipping_fee = 25000
 
@@ -135,17 +148,29 @@ def place_order(
             data.order_number = order_number
             data.save()
 
-            # order = Order.objects.get(
-            #     user=current_user, is_ordered=False, order_number=order_number
-            # )
-            # context = {
-            #     "order": order,
-            #     "cart_items": cart_items,
-            #     "shipping_fee": shipping_fee,
-            #     "total": total,
-            #     "grand_total": grand_total,
-            # }
-            # return render(request, "orders/payments.html", context)
-            return redirect("checkout")
+            # Định dạng lại theo tiền Việt Nam
+            locale.setlocale(locale.LC_ALL, "vi_VN.UTF-8")
+            formatted_total = locale.format_string("%d", total, grouping=True) + "đ"
+            formatted_grand_total = (
+                locale.format_string("%d", grand_total, grouping=True) + "đ"
+            )
+            formatted_shipping_fee = (
+                locale.format_string("%d", shipping_fee, grouping=True) + "đ"
+            )
+
+            order = Order.objects.get(
+                user=current_user, is_ordered=False, order_number=order_number
+            )
+            context = {
+                "order": order,
+                "cart_items": cart_items_with_variations,
+                "shipping_fee": shipping_fee,
+                "total": total,
+                "grand_total": grand_total,
+                "formatted_shipping_fee": formatted_shipping_fee,
+                "formatted_total": formatted_total,
+                "formatted_grand_total": formatted_grand_total,
+            }
+            return render(request, "orders/payments.html", context)
     else:
         return redirect("checkout")

@@ -373,7 +373,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
-        cart_items_with_images = []
+        cart_items_with_variations = []
 
         for cart_item in cart_items:
             product_price = (
@@ -384,22 +384,14 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             total += product_price * cart_item.quantity
             quantity += cart_item.quantity
 
-            # Gọi hàm get_url từ product và thêm vào context
-            product_url = cart_item.product.get_url()
-
-            # Lấy hình ảnh chính của sản phẩm
-            main_image = cart_item.product.images.filter(is_main=True).first()
-
             # Sắp xếp variations theo variation_category (Color trước, Size sau)
             sorted_variations = cart_item.variations.all().order_by(
                 "variation_category"
             )
 
-            cart_items_with_images.append(
+            cart_items_with_variations.append(
                 {
                     "cart_item": cart_item,
-                    "main_image": main_image.image.url if main_image else None,
-                    "product_url": product_url,
                     "sorted_variations": sorted_variations,
                 }
             )
@@ -421,7 +413,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         )
 
     except ObjectDoesNotExist:
-        cart_items_with_images = []
+        cart_items_with_variations = []
         formatted_total = "0đ"
         formatted_grand_total = "0đ"
         formatted_shipping_fee = "0đ"
@@ -432,6 +424,6 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         "formatted_grand_total": formatted_grand_total,
         "formatted_shipping_fee": formatted_shipping_fee,
         "quantity": quantity,
-        "cart_items": cart_items_with_images,
+        "cart_items": cart_items_with_variations,
     }
     return render(request, "store/checkout.html", context)

@@ -46,22 +46,22 @@ Kiểm tra thông tin đơn hàng
                   <h5 class="card-header" style="background-color: white; font-weight: bold; font-size: 18px;">Thông tin giao hàng</h5>
                   <div class="card-body">
                     <h5 class="card-title">Họ và tên: </h5>
-                    <p class="card-text">Lại Minh Kiệt</p>
+                    <p class="card-text">{{ order.full_name }}</p>
 
                     <h5 class="card-title">Số điện thoại: </h5>
-                    <p class="card-text">0376707091</p>
+                    <p class="card-text">{{ order.phone_number }}</p>
 
                     <h5 class="card-title">Địa chỉ (Số nhà, Tên đường): </h5>
-                    <p class="card-text">Số 7, Đường T14, Ấp 4</p>
+                    <p class="card-text">{{ order.address }}</p>
 
                     <h5 class="card-title">Xã / Phường: </h5>
-                    <p class="card-text">Tân Quý Tây</p>
+                    <p class="card-text">{{ order.commune }}</p>
 
                     <h5 class="card-title">Quận / Huyện: </h5>
-                    <p class="card-text">Bình Chánh</p>
+                    <p class="card-text">{{ order.district }}</p>
 
                     <h5 class="card-title">Tỉnh / Thành phố: </h5>
-                    <p class="card-text">Hồ Chí Minh</p>
+                    <p class="card-text">{{ order.city }}</p>
                   </div>
                 </div>
               </div>
@@ -100,7 +100,7 @@ Kiểm tra thông tin đơn hàng
                     <li>Tổng tiền phải trả <span class="count">{{ formatted_grand_total }}</span></li>
                   </ul>
                   <div class="payment-box" style="display: flex; justify-content: space-between;">
-                    <div><a href="{% url 'cart' %}" class="btn-solid btn">Quay lại</a></div>
+                    <div><a href="{% url 'checkout' %}" class="btn-solid btn">Quay lại</a></div>
                     <div><button type="submit" class="btn-solid btn">Tiếp tục</button></div>
                   </div>
                 </div>
