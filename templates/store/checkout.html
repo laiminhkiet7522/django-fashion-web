@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Thông tin nhận hàng
+Thông tin giao hàng
 {% endblock %}
 
 {% block content %}
@@ -13,14 +13,14 @@ Thông tin nhận hàng
     <div class="row">
       <div class="col-sm-6">
         <div class="page-title">
-          <h2>Thông tin nhận hàng</h2>
+          <h2>Thông tin giao hàng</h2>
         </div>
       </div>
       <div class="col-sm-6">
         <nav aria-label="breadcrumb" class="theme-breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
-            <li class="breadcrumb-item active">Thông tin nhận hàng</li>
+            <li class="breadcrumb-item active">Thông tin giao hàng</li>
           </ol>
         </nav>
       </div>
@@ -39,40 +39,40 @@ Thông tin nhận hàng
           <div class="row">
             <div class="col-lg-6 col-sm-12 col-xs-12">
               <div class="checkout-title">
-                <h3>Vui lòng điền đầy đủ thông tin nhận hàng</h3>
+                <h3>Vui lòng điền đầy đủ thông tin giao hàng</h3>
               </div>
               <div class="row check-out">
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Họ và tên đệm</div>
-                  <input type="text" name="first_name" value="" placeholder="" required>
+                  <input type="text" name="first_name" value="" placeholder="Nhập vào họ và tên đệm . . ." required>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Tên</div>
-                  <input type="text" name="last_name" value="" placeholder="" required>
+                  <input type="text" name="last_name" value="" placeholder="Nhập vào tên . . ." required>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Số điện thoại</div>
-                  <input type="text" name="phone_number" value="" placeholder="" required>
+                  <input type="text" name="phone_number" value="" placeholder="Nhập vào số điện thoại . . ." required>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Email</div>
-                  <input type="text" name="email" value="" placeholder="" required>
+                  <input type="text" name="email" value="" placeholder="Nhập vào email . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                   <div class="field-label">Địa chỉ</div>
-                  <input type="text" name="address" value="" placeholder="" required>
+                  <input type="text" name="address" value="" placeholder="Nhập vào số nhà, tên đường, ấp. Ví dụ (Số 7, Đường T14, Ấp 4) . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                   <div class="field-label">Tỉnh / Thành Phố</div>
-                  <input type="text" name="city" value="" placeholder="" required>
+                  <input type="text" name="city" value="" placeholder="Nhập vào tỉnh hoặc thành phố. Ví dụ (Hồ Chí Minh) . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-6 col-xs-12">
                   <div class="field-label">Quận / Huyện</div>
-                  <input type="text" name="district" value="" placeholder="" required>
+                  <input type="text" name="district" value="" placeholder="Nhập vào quận hoặc huyện. Ví dụ (Bình Chánh) . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-6 col-xs-12">
-                  <div class="field-label">Xã / Phường / Thị Trấn</div>
-                  <input type="text" name="commune" value="" placeholder="" required>
+                  <div class="field-label">Xã / Phường</div>
+                  <input type="text" name="commune" value="" placeholder="Nhập vào xã hoặc phường. Ví dụ (Tân Quý Tây) . . ." required>
                 </div>
               </div>
             </div>
@@ -84,9 +84,10 @@ Thông tin nhận hàng
                   </div>
                   <ul class="qty">
                     {% for item in cart_items %}
-                    <li>
-                      {{ item.cart_item.product.product_name }} × {{ item.cart_item.quantity }}<br>
-                      <p>
+                    <li style="font-size: 15px; color: #232323; line-height: 20px;">
+                      {{ item.cart_item.product.product_name }}<br>
+                      <p style="font-size: 14px; color: #777; line-height: 20px;">
+                        Số lượng : {{ item.cart_item.quantity }}<br>
                         {% if item.sorted_variations %}
                         {% for variation in item.sorted_variations %}
                         {{ variation.variation_category }} : {{ variation.variation_value }}<br>
