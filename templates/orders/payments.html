@@ -34,83 +34,127 @@ Kiểm tra thông tin đơn hàng
   <div class="container">
     <div class="checkout-page">
       <div class="checkout-form">
-        <form action="{% url 'place_order' %}" method="POST">
-          {% csrf_token %}
-          <div class="row">
-            <div class="col-lg-6 col-sm-12 col-xs-12">
-              <div class="checkout-title">
-                <h3>Xem lại thông tin đơn hàng và thực hiện thanh toán</h3>
+        <div class="row">
+          <div class="col-lg-6 col-sm-12 col-xs-12">
+            <div class="checkout-title">
+              <h3>Xem lại thông tin đơn hàng và thực hiện thanh toán</h3>
+            </div>
+            <div class="row check-out">
+              <div class="card">
+                <h5 class="card-header" style="background-color: white; font-weight: bold; font-size: 18px;">Thông tin
+                  giao hàng</h5>
+                <div class="card-body">
+                  <h5 class="card-title">Họ và tên: </h5>
+                  <p class="card-text">{{ order.full_name }}</p>
+
+                  <h5 class="card-title">Số điện thoại: </h5>
+                  <p class="card-text">{{ order.phone_number }}</p>
+
+                  <h5 class="card-title">Địa chỉ (Số nhà, Tên đường): </h5>
+                  <p class="card-text">{{ order.address }}</p>
+
+                  <h5 class="card-title">Xã / Phường: </h5>
+                  <p class="card-text">{{ order.commune }}</p>
+
+                  <h5 class="card-title">Quận / Huyện: </h5>
+                  <p class="card-text">{{ order.district }}</p>
+
+                  <h5 class="card-title">Tỉnh / Thành phố: </h5>
+                  <p class="card-text">{{ order.city }}</p>
+                </div>
               </div>
-              <div class="row check-out">
-                <div class="card">
-                  <h5 class="card-header" style="background-color: white; font-weight: bold; font-size: 18px;">Thông tin giao hàng</h5>
-                  <div class="card-body">
-                    <h5 class="card-title">Họ và tên: </h5>
-                    <p class="card-text">{{ order.full_name }}</p>
+              <div><a href="{% url 'checkout' %}" class="btn-solid btn" style="margin-top: 20px;">Quay lại</a></div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-12 col-xs-12">
+            <div class="checkout-details">
+              <div class="order-box">
+                <div class="title-box">
+                  <div>Sản phẩm <span>Giá</span></div>
+                </div>
+                <ul class="qty">
+                  {% for item in cart_items %}
+                  <li style="font-size: 15px; color: #232323; line-height: 20px;">
+                    {{ item.cart_item.product.product_name }}<br>
+                    <p style="font-size: 14px; color: #777; line-height: 20px;">
+                      Số lượng : {{ item.cart_item.quantity }}<br>
+                      {% if item.sorted_variations %}
+                      {% for variation in item.sorted_variations %}
+                      {{ variation.variation_category }} : {{ variation.variation_value }}<br>
+                      {% endfor %}
+                      {% endif %}
+                    </p>
+                    <span style="position: absolute; top: 0; right: 0;">
+                      {% if item.cart_item.product.discount_price %}
+                      {{ item.cart_item.product.formatted_discount_price }}/cái
+                      {% else %}
+                      {{ item.cart_item.product.formatted_price }}/cái
+                      {% endif %}
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <ul class="sub-total">
+                  <li>Tạm tính <span class="count">{{ formatted_total }}</span></li>
+                  <li>Phí vận chuyển <span class="count">{{ formatted_shipping_fee }}</span></li>
+                  <li>Tổng tiền phải trả <span class="count">{{ formatted_grand_total }}</span></li>
+                </ul>
+                <div class="payment-box" style="text-align: center;">
+                  <div style="margin-bottom: 20px;">
+                    <div id="paypal-button-container">
 
-                    <h5 class="card-title">Số điện thoại: </h5>
-                    <p class="card-text">{{ order.phone_number }}</p>
-
-                    <h5 class="card-title">Địa chỉ (Số nhà, Tên đường): </h5>
-                    <p class="card-text">{{ order.address }}</p>
-
-                    <h5 class="card-title">Xã / Phường: </h5>
-                    <p class="card-text">{{ order.commune }}</p>
-
-                    <h5 class="card-title">Quận / Huyện: </h5>
-                    <p class="card-text">{{ order.district }}</p>
-
-                    <h5 class="card-title">Tỉnh / Thành phố: </h5>
-                    <p class="card-text">{{ order.city }}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-lg-6 col-sm-12 col-xs-12">
-              <div class="checkout-details">
-                <div class="order-box">
-                  <div class="title-box">
-                    <div>Sản phẩm <span>Giá</span></div>
-                  </div>
-                  <ul class="qty">
-                    {% for item in cart_items %}
-                    <li style="font-size: 15px; color: #232323; line-height: 20px;">
-                      {{ item.cart_item.product.product_name }}<br>
-                      <p style="font-size: 14px; color: #777; line-height: 20px;">
-                        Số lượng : {{ item.cart_item.quantity }}<br>
-                        {% if item.sorted_variations %}
-                        {% for variation in item.sorted_variations %}
-                        {{ variation.variation_category }} : {{ variation.variation_value }}<br>
-                        {% endfor %}
-                        {% endif %}
-                      </p>
-                      <span style="position: absolute; top: 0; right: 0;">
-                        {% if item.cart_item.product.discount_price %}
-                        {{ item.cart_item.product.formatted_discount_price }}/cái
-                        {% else %}
-                        {{ item.cart_item.product.formatted_price }}/cái
-                        {% endif %}
-                      </span>
-                    </li>
-                    {% endfor %}
-                  </ul>
-                  <ul class="sub-total">
-                    <li>Tạm tính <span class="count">{{ formatted_total }}</span></li>
-                    <li>Phí vận chuyển <span class="count">{{ formatted_shipping_fee }}</span></li>
-                    <li>Tổng tiền phải trả <span class="count">{{ formatted_grand_total }}</span></li>
-                  </ul>
-                  <div class="payment-box" style="display: flex; justify-content: space-between;">
-                    <div><a href="{% url 'checkout' %}" class="btn-solid btn">Quay lại</a></div>
-                    <div><button type="submit" class="btn-solid btn">Tiếp tục</button></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </section>
 <!-- section end -->
+
+{% block script %}
+
+<!-- PayPal Script -->
+<script
+  src="https://www.paypal.com/sdk/js?client-id=AQsdQhOGeAMfHwckZvpyNUhO5dHOlMLU47UxytLXVa47a7fGOfIKHwFW_kQjj5WkSOUrUllb74_aPDEI&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
+  data-sdk-integration-source="developer-studio"></script>
+
+<script>
+
+  var amount = "{{ grand_total }}"
+
+  paypal.Buttons({
+
+    style: {
+      color: 'blue',
+      shape: 'rect',
+      label: 'pay',
+      height: 40
+    },
+
+    // Set up the transaction
+    createOrder: function (data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '10.00',
+          }
+        }]
+      });
+    },
+
+    // Finalize the transaction
+    onApprove: function (data, actions) {
+      return actions.order.capture().then(function (details) {
+        // Show a success message to the buyer
+        console.log(details);
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
+{% endblock %}
 
 {% endblock %}
