@@ -9,7 +9,7 @@ from products.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 import locale
-
+import requests
 
 def payments(request):
     body = json.loads(request.body)
@@ -18,11 +18,25 @@ def payments(request):
         user=request.user, is_ordered=False, order_number=body["orderID"]
     )
 
+    # Dùng Exchangerate api để chuyển đổi tiền tệ từ VND sang USD để lưu vào database
+    exchange_rate_api_url = (
+        "https://v6.exchangerate-api.com/v6/5a5c6acf5dd7289a52bc3eea/latest/USD"
+    )
+    try:
+        response = requests.get(exchange_rate_api_url)
+        response.raise_for_status()
+        exchange_rates = response.json()
+        vnd_to_usd_rate = exchange_rates["conversion_rates"]["VND"]
+        grand_total_usd = round(order.order_total / vnd_to_usd_rate, 2)
+    except Exception as e:
+        grand_total_usd = None
+        print(f"Error fetching exchange rate: {e}")
+
     payment = Payment(
         user=request.user,
         payment_id=body["transactionID"],
         payment_method=body["payment_method"],
-        amount_paid=order.order_total,
+        amount_paid=grand_total_usd,
         status=body["status"],
     )
     payment.save()
@@ -110,6 +124,18 @@ def place_order(
 
     grand_total = total + shipping_fee
 
+    # Dùng Exchangerate api để chuyển đổi tiền tệ từ VND sang USD để thực hiện thanh toán Paypal
+    exchange_rate_api_url = "https://v6.exchangerate-api.com/v6/5a5c6acf5dd7289a52bc3eea/latest/USD"
+    try:
+        response = requests.get(exchange_rate_api_url)
+        response.raise_for_status()
+        exchange_rates = response.json()
+        vnd_to_usd_rate = exchange_rates["conversion_rates"]["VND"]
+        grand_total_usd = round(grand_total / vnd_to_usd_rate, 2)
+    except Exception as e:
+        grand_total_usd = None
+        print(f"Error fetching exchange rate: {e}")
+
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -150,12 +176,13 @@ def place_order(
             order = Order.objects.get(
                 user=current_user, is_ordered=False, order_number=order_number
             )
+
             context = {
                 "order": order,
                 "cart_items": cart_items_with_variations,
                 "shipping_fee": shipping_fee,
                 "total": total,
-                "grand_total": grand_total,
+                "grand_total_usd": grand_total_usd,
                 "formatted_shipping_fee": formatted_shipping_fee,
                 "formatted_total": formatted_total,
                 "formatted_grand_total": formatted_grand_total,
