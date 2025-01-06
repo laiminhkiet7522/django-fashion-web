@@ -57,13 +57,11 @@ def payments(request):
         orderDetaill.variations.set(product_variation)
         orderDetaill.save()
 
-    #     # Reduce the quantity of the sold products
-    #     product = Product.objects.get(id=item.product_id)
-    #     product.stock -= item.quantity
-    #     product.save()
+        product = Product.objects.get(id=item.product_id)
+        product.stock -= item.quantity
+        product.save()
 
-    # # Clear cart
-    # CartItem.objects.filter(user=request.user).delete()
+    CartItem.objects.filter(user=request.user).delete()
 
     # # Send order recieved email to customer
     # mail_subject = "Thank you for your order!"

@@ -28,8 +28,17 @@ class ProductAdminForm(forms.ModelForm):
 
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm  # Sử dụng form tùy chỉnh
-    list_display = ('product_code', 'product_name', 'price', 'discount_price',
-                    'category', 'updated_at', 'is_available', 'is_new', 'is_featured')
+    list_display = (
+        "product_code",
+        "product_name",
+        "price",
+        "discount_price",
+        "stock",
+        "category",
+        "is_available",
+        "is_new",
+        "is_featured",
+    )
     readonly_fields = ('slug',)  # Slug là readonly
     list_editable = ('price', 'discount_price',
                      'is_available', 'is_new', 'is_featured')
