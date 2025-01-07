@@ -20,7 +20,7 @@ Quản lý tài khoản
         <nav aria-label="breadcrumb" class="theme-breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Đăng nhập</li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý tài khoản</li>
           </ol>
         </nav>
       </div>
@@ -42,16 +42,19 @@ Quản lý tài khoản
               <img src="../assets/images/avtar.jpg" alt="" class="img-fluid">
             </div>
             <div class="profile-detail">
-              <h5>Mark Jecno</h5>
-              <h6>mark.jecno@mail.com</h6>
+              <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+              <h6>{{ user.email }}</h6>
             </div>
           </div>
           <div class="faq-tab">
             <ul class="nav nav-tabs" id="top-tab" role="tablist">
-              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#info" class="nav-link active">Thông tin chung</a></li>
+              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#info" class="nav-link active">Thông tin
+                  chung</a></li>
               </li>
-              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#orders" class="nav-link">Quản lý đơn hàng</a></li>
-              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#profile" class="nav-link">Thay đổi thông tin</a></li>
+              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#orders" class="nav-link">Quản lý đơn
+                  hàng</a></li>
+              <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#profile" class="nav-link">Thay đổi thông
+                  tin</a></li>
               <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Đăng xuất</a> </li>
             </ul>
           </div>
@@ -62,26 +65,17 @@ Quản lý tài khoản
           <div class="tab-pane fade show active" id="info">
             <div class="counter-section">
               <div class="welcome-msg">
-                <h4>Xin chào, {{ user.first_name }} {{ user.last_name }} !</h4>
+                <h4>KVBL xin chào!</h4>
                 <p>Tại đây, bạn có thể xem và cập nhật
-                thông tin tài khoản. Chọn liên kết bên dưới để xem hoặc chỉnh sửa thông tin.</p>
+                  thông tin tài khoản. Chọn liên kết bên dưới để xem hoặc chỉnh sửa thông tin.</p>
               </div>
               <div class="row">
                 <div class="col-md-4">
                   <div class="counter-box">
                     <img src="{% static '/images/icon/dashboard/sale.png' %}" class="img-fluid">
                     <div>
-                      <h3>25</h3>
+                      <h3>{{ orders_count }}</h3>
                       <h5>Tổng đơn hàng</h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="counter-box">
-                    <img src="{% static '/images/icon/dashboard/order.png' %}" class="img-fluid">
-                    <div>
-                      <h3>50</h3>
-                      <h5>Yêu thích</h5>
                     </div>
                   </div>
                 </div>
@@ -94,170 +88,40 @@ Quản lý tài khoản
                 <div class="card dashboard-table mt-0">
                   <div class="card-body table-responsive-sm">
                     <div class="top-sec">
-                      <h3>My Orders</h3>
+                      <h3>Đơn hàng của bạn</h3>
                     </div>
                     <div class="table-responsive-xl">
                       <table class="table cart-table order-table">
                         <thead>
                           <tr class="table-head">
-                            <th scope="col">image</th>
-                            <th scope="col">Order Id</th>
-                            <th scope="col">Product Details</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">View</th>
+                            <th scope="col">Số đơn hàng</th>
+                            <th scope="col">Người đặt hàng</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Tổng cộng</th>
+                            <th scope="col">Ngày đặt hàng</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {% for order in my_order %}
                           <tr>
                             <td>
-                              <a href="javascript:void(0)">
-                                <img src="../assets/images/pro3/1.jpg" class="blur-up lazyloaded" alt="">
-                              </a>
+                              <span class="fs-6"><a href="">{{ order.order_number }}</a></span>
                             </td>
                             <td>
-                              <span class="mt-0">#125021</span>
+                              <span class="fs-6">{{ order.full_name }}</span>
                             </td>
                             <td>
-                              <span class="fs-6">Purple polo tshirt</span>
+                              <span class="fs-6">{{ order.phone_number }}</span>
                             </td>
                             <td>
-                              <span class="badge rounded-pill bg-success custom-badge">Shipped</span>
+                              <span class="fs-6 order-total" data-total="{{ order.order_total }}">{{ order.order_total
+                                }}</span>
                             </td>
                             <td>
-                              <span class="theme-color fs-6">$49.54</span>
-                            </td>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <i class="fa fa-eye text-theme"></i>
-                              </a>
+                              <span class="fs-6">{{ order.created_at }}</span>
                             </td>
                           </tr>
-
-                          <tr>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <img src="../assets/images/pro3/2.jpg" class="blur-up lazyloaded" alt="">
-                              </a>
-                            </td>
-                            <td>
-                              <span class="mt-0">#125367</span>
-                            </td>
-                            <td>
-                              <span class="fs-6">Sleevless white top</span>
-                            </td>
-                            <td>
-                              <span class="badge rounded-pill bg-danger custom-badge">Pending</span>
-                            </td>
-                            <td>
-                              <span class="theme-color fs-6">$49.54</span>
-                            </td>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <i class="fa fa-eye text-theme"></i>
-                              </a>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <img src="../assets/images/pro3/27.jpg" class="blur-up lazyloaded" alt="">
-                              </a>
-                            </td>
-                            <td>
-                              <p>#125948</p>
-                            </td>
-                            <td>
-                              <p class="fs-6">multi color polo tshirt</p>
-                            </td>
-                            <td>
-                              <span class="badge rounded-pill bg-success custom-badge">Shipped</span>
-                            </td>
-                            <td>
-                              <p class="theme-color fs-6">$49.54</p>
-                            </td>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <i class="fa fa-eye text-theme"></i>
-                              </a>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <img src="../assets/images/pro3/28.jpg" class="blur-up lazyloaded" alt="">
-                              </a>
-                            </td>
-                            <td>
-                              <p>#127569</p>
-                            </td>
-                            <td>
-                              <p class="fs-6">Candy red solid tshirt</p>
-                            </td>
-                            <td>
-                              <span class="badge rounded-pill bg-success custom-badge">Shipped</span>
-                            </td>
-                            <td>
-                              <p class="theme-color fs-6">$49.54</p>
-                            </td>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <i class="fa fa-eye text-theme"></i>
-                              </a>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <img src="../assets/images/pro3/33.jpg" class="blur-up lazyloaded" alt="">
-                              </a>
-                            </td>
-                            <td>
-                              <p>#125753</p>
-                            </td>
-                            <td>
-                              <p class="fs-6">multicolored polo tshirt</p>
-                            </td>
-                            <td>
-                              <span class="badge rounded-pill bg-secondary custom-badge">Canceled</span>
-                            </td>
-                            <td>
-                              <p class="theme-color fs-6">$49.54</p>
-                            </td>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <i class="fa fa-eye text-theme"></i>
-                              </a>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <img src="../assets/images/pro3/34.jpg" class="blur-up lazyloaded" alt="">
-                              </a>
-                            </td>
-                            <td>
-                              <span>#125021</span>
-                            </td>
-                            <td>
-                              <span class="fs-6">Men's Sweatshirt</span>
-                            </td>
-                            <td>
-                              <span class="badge rounded-pill bg-secondary custom-badge">Canceled</span>
-                            </td>
-                            <td>
-                              <span class="theme-color fs-6">$49.54</span>
-                            </td>
-                            <td>
-                              <a href="javascript:void(0)">
-                                <i class="fa fa-eye text-theme"></i>
-                              </a>
-                            </td>
-                          </tr>
+                          {% endfor %}
                         </tbody>
                       </table>
                     </div>
@@ -427,6 +291,33 @@ Quản lý tài khoản
   setTimeout(function () {
     $('#message').fadeOut('slow')
   }, 5000)
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Hàm định dạng tiền Việt Nam
+    function formatCurrencyVND(amount) {
+      // Chuyển số thành chuỗi có phân cách hàng nghìn và thêm "đ"
+      return new Intl.NumberFormat("vi-VN", {
+        minimumFractionDigits: 0, // Không hiển thị số thập phân
+        maximumFractionDigits: 0
+      }).format(amount) + "đ";
+    }
+
+    // Lấy tất cả các cột chứa `order_total`
+    document.querySelectorAll(".order-total").forEach(function (element) {
+      // Lấy giá trị `data-total` từ HTML
+      const total = element.getAttribute("data-total");
+
+      if (total) {
+        // Chuyển thành số trước khi định dạng
+        const formattedTotal = formatCurrencyVND(Number(total));
+
+        // Cập nhật nội dung của ô
+        element.textContent = formattedTotal;
+      }
+    });
+  });
+
 </script>
 {% endblock %}
 

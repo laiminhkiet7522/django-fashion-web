@@ -11,6 +11,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
+from orders.models import Order, OrderDetail
 from django.http import HttpResponse
 import requests
 
@@ -84,7 +85,7 @@ def login(request):
                     cart_item = CartItem.objects.filter(user=user)
                     existing_variation_list = []
                     id_list = []
-                    
+
                     for item in cart_item:
                         existing_variation = item.variations.all()
                         existing_variation_list.append(list(existing_variation))
@@ -108,15 +109,15 @@ def login(request):
                 pass
             auth.login(request, user)
             messages.success(request, "Đăng nhập thành công.")
-            url = request.META.get('HTTP_REFERER')
+            url = request.META.get("HTTP_REFERER")
             try:
                 query = requests.utils.urlparse(url).query
-                params = dict(x.split('=') for x in query.split('&'))
-                if 'next' in params:
-                    nextPage = params['next']
+                params = dict(x.split("=") for x in query.split("&"))
+                if "next" in params:
+                    nextPage = params["next"]
                     return redirect(nextPage)
             except:
-                return redirect('dashboard')
+                return redirect("dashboard")
         else:
             messages.error(request, "Thông tin đăng nhập không hợp lệ.")
             return redirect("login")
@@ -150,7 +151,20 @@ def activate(request, uidb64, token):
 
 @login_required(login_url="login")
 def dashboard(request):
-    return render(request, "accounts/dashboard.html")
+    orders = Order.objects.order_by("-created_at").filter(
+        user_id=request.user.id, is_ordered=True
+    )
+    orders_count = orders.count()
+
+    my_order = Order.objects.filter(user=request.user, is_ordered=True).order_by(
+        "-created_at"
+    )
+
+    context = {
+        "orders_count": orders_count,
+        "my_order": my_order,
+    }
+    return render(request, "accounts/dashboard.html", context)
 
 
 def forgotPassword(request):

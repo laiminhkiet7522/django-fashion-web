@@ -20,18 +20,14 @@ class RegistrationForm(forms.ModelForm):
         return cleaned_data
 
     def validate_email(self, email):
-        """
-        Kiểm tra email đã tồn tại hay chưa.
-        """
+        # Kiểm tra email đã tồn tại hay chưa.
         if Account.objects.filter(email=email).exists():
             self.add_error(
                 "email", "Email này đã được sử dụng, vui lòng chọn email khác."
             )
 
     def validate_phone_number(self, phone_number):
-        """
-        Kiểm tra số điện thoại có hợp lệ hay không.
-        """
+        # Kiểm tra số điện thoại có hợp lệ hay không.
         valid_prefixes = [
             "086",
             "096",
@@ -78,9 +74,7 @@ class RegistrationForm(forms.ModelForm):
             )
 
     def validate_passwords(self, password, confirm_password):
-        """
-        Kiểm tra độ dài mật khẩu; sự khớp giữa mật khẩu và mật khẩu xác nhận.
-        """
+        # Kiểm tra độ dài mật khẩu; sự khớp giữa mật khẩu và mật khẩu xác nhận.
         if not password or len(password) < 6:
             self.add_error("password", "Mật khẩu phải dài ít nhất 6 ký tự.")
         if password != confirm_password:
