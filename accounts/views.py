@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistrationForm
-from .models import Account
+from .forms import RegistrationForm, UserForm, UserProfileForm
+from .models import Account, UserProfile
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
@@ -160,9 +160,25 @@ def dashboard(request):
         "-created_at"
     )
 
+    userprofile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == "POST":
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Thông tin đã được cập nhật thành công.")
+            return redirect("dashboard")
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+
     context = {
         "orders_count": orders_count,
         "my_order": my_order,
+        "user_form": user_form,
+        "profile_form": profile_form,
+        "userprofile": userprofile,
     }
     return render(request, "accounts/dashboard.html", context)
 
@@ -242,3 +258,4 @@ def resetPassword(request):
             return redirect("resetPassword")
     else:
         return render(request, "accounts/reset_password.html")
+

@@ -29,11 +29,17 @@ Quản lý tài khoản
 </div>
 <!-- breadcrumb End -->
 
-
 <!--  dashboard section start -->
 <section class="dashboard-section section-b-space user-dashboard-section">
   <div class="container">
     {% include 'includes/alerts.html' %}
+    {% if user_form.phone_number.errors %}
+    <div class="alert alert-danger mt-2">
+      {% for error in user_form.phone_number.errors %}
+      <small>{{ error }}</small>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="row">
       <div class="col-lg-3">
         <div class="dashboard-sidebar">
@@ -88,7 +94,7 @@ Quản lý tài khoản
                 <div class="card dashboard-table mt-0">
                   <div class="card-body table-responsive-sm">
                     <div class="top-sec">
-                      <h3>Đơn hàng của bạn</h3>
+                      <h3>Tất cả đơn hàng của bạn</h3>
                     </div>
                     <div class="table-responsive-xl">
                       <table class="table cart-table order-table">
@@ -137,141 +143,80 @@ Quản lý tài khoản
                   <div class="card-body">
                     <div class="dashboard-box">
                       <div class="dashboard-title">
-                        <h4>profile</h4>
-                        <a class="edit-link" href="#">edit</a>
+                        <h4>Thông tin cá nhân</h4>
                       </div>
-                      <div class="dashboard-detail">
-                        <ul>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>company name</h6>
+                      <form action="{% url 'dashboard' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="dashboard-detail">
+                          <ul>
+                            <li>
+                              <div class="form-row row">
+                                <div class="form-group col-md-6">
+                                  <label>Họ và tên đệm <span class="text-danger">*</span></label>
+                                  {{ user_form.first_name }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                  <label>Tên <span class="text-danger">*</span></label>
+                                  {{ user_form.last_name }}
+                                </div>
                               </div>
-                              <div class="right">
-                                <h6>Fashion Store</h6>
+                              <div class="form-row row">
+                                <div class="form-group col-md-12">
+                                  <label>Số điện thoại <span class="text-danger">*</span></label>
+                                  {{ user_form.phone_number }}
+                                </div>
                               </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>email address</h6>
+                              <div class="form-row row">
+                                <div class="form-group col-md-12">
+                                  <label>Địa chỉ (Số nhà, Tên đường, Ấp / Thôn) <span class="text-danger">*</span></label>
+                                  {{ profile_form.address }}
+                                </div>
                               </div>
-                              <div class="right">
-                                <h6>mark.jecno@gmail.com</h6>
+                              <div class="form-row row">
+                                <div class="form-group col-md-4">
+                                  <label>Xã / Phường <span class="text-danger">*</span></label>
+                                  {{ profile_form.commune }}
+                                </div>
+                                <div class="form-group col-md-4">
+                                  <label>Quận / Huyện <span class="text-danger">*</span></label>
+                                  {{ profile_form.district }}
+                                </div>
+                                <div class="form-group col-md-4">
+                                  <label>Tỉnh / Thành phố <span class="text-danger">*</span></label>
+                                  {{ profile_form.city }}
+                                </div>
                               </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>Country / Region</h6>
-                              </div>
-                              <div class="right">
-                                <h6>Downers Grove, IL</h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>Year Established</h6>
-                              </div>
-                              <div class="right">
-                                <h6>2018</h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>Total Employees</h6>
-                              </div>
-                              <div class="right">
-                                <h6>101 - 200 People</h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>category</h6>
-                              </div>
-                              <div class="right">
-                                <h6>clothing</h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>street address</h6>
-                              </div>
-                              <div class="right">
-                                <h6>549 Sulphur Springs Road</h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>city/state</h6>
-                              </div>
-                              <div class="right">
-                                <h6>Downers Grove, IL</h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>zip</h6>
-                              </div>
-                              <div class="right">
-                                <h6>60515</h6>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
+                            </li>
+                          </ul>
+                          <div style="display: flex; justify-content: end;"><button type="submit"
+                              class="btn btn-solid me-3">Cập nhật</button></div>
+                        </div>
+                      </form>
                       <div class="dashboard-title mt-lg-5 mt-3">
-                        <h4>login details</h4>
-                        <a class="edit-link" href="#">edit</a>
+                        <h4>Đổi mật khẩu mới</h4>
                       </div>
                       <div class="dashboard-detail">
                         <ul>
                           <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>Email Address</h6>
+                            <div class="form-row row">
+                              <div class="form-group col-md-12">
+                                <label for="">Mật khẩu cũ</label>
+                                <input type="text" class="form-control" name="" value="">
                               </div>
-                              <div class="right">
-                                <h6>mark.jecno@gmail.com <a class="edit-link" href="#">edit</a></h6>
+                              <div class="form-group col-md-12">
+                                <label for="">Mật khẩu mới</label>
+                                <input type="text" class="form-control" name="" value="">
                               </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>Phone No.</h6>
-                              </div>
-                              <div class="right">
-                                <h6>+01 4485 5454<a class="edit-link" href="#">Edit</a></h6>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="details">
-                              <div class="left">
-                                <h6>Password</h6>
-                              </div>
-                              <div class="right">
-                                <h6>******* <a class="edit-link" href="#">Edit</a>
-                                </h6>
+                              <div class="form-group col-md-12">
+                                <label for="">Nhập lại mật khẩu mới</label>
+                                <input type="text" class="form-control" name="" value="">
                               </div>
                             </div>
                           </li>
                         </ul>
+                        <div style="display: flex; justify-content: end;"><button type="submit"
+                            class="btn btn-solid me-3">Đổi mật khẩu</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -287,11 +232,44 @@ Quản lý tài khoản
 <!--  dashboard section end -->
 
 {% block script %}
+<style>
+  /* CSS cho thông báo lỗi */
+  .alert.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 5px;
+  }
+
+  .alert.alert-danger p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+  }
+</style>
+
 <script>
+  // Tự động ẩn tất cả các thông báo lỗi sau 10 giây
+  setTimeout(function () {
+    document.querySelectorAll('.alert.alert-danger.mt-2').forEach(function (alert) {
+      alert.style.transition = 'opacity 1s';
+      alert.style.opacity = '0';
+      setTimeout(() => alert.remove(), 1000); // Xóa hoàn toàn sau khi hiệu ứng mờ kết thúc
+    });
+  }, 10000); // Thời gian 10 giây
+
   setTimeout(function () {
     $('#message').fadeOut('slow')
   }, 5000)
 </script>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // Hàm định dạng tiền Việt Nam
@@ -317,7 +295,6 @@ Quản lý tài khoản
       }
     });
   });
-
 </script>
 {% endblock %}
 

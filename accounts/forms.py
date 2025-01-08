@@ -1,5 +1,5 @@
 from django import forms
-from .models import Account
+from .models import Account, UserProfile
 import re
 
 
@@ -23,7 +23,7 @@ class RegistrationForm(forms.ModelForm):
         # Kiểm tra email đã tồn tại hay chưa.
         if Account.objects.filter(email=email).exists():
             self.add_error(
-                "email", "Email này đã được sử dụng, vui lòng chọn email khác."
+                "email", "Lỗi: Email này đã được sử dụng, vui lòng chọn email khác."
             )
 
     def validate_phone_number(self, phone_number):
@@ -65,20 +65,23 @@ class RegistrationForm(forms.ModelForm):
         ]
 
         if not re.match(r"^\d{10}$", phone_number):
-            self.add_error("phone_number", "Số điện thoại phải đúng 10 chữ số.")
+            self.add_error("phone_number", "Lỗi: Số điện thoại phải đúng 10 chữ số.")
             return
 
         if phone_number[:3] not in valid_prefixes:
             self.add_error(
-                "phone_number", "Số điện thoại không hợp lệ với nhà mạng tại Việt Nam."
+                "phone_number",
+                "Lỗi: Số điện thoại không hợp lệ với nhà mạng tại Việt Nam.",
             )
 
     def validate_passwords(self, password, confirm_password):
         # Kiểm tra độ dài mật khẩu; sự khớp giữa mật khẩu và mật khẩu xác nhận.
         if not password or len(password) < 6:
-            self.add_error("password", "Mật khẩu phải dài ít nhất 6 ký tự.")
+            self.add_error("password", "Lỗi: Mật khẩu phải dài ít nhất 6 ký tự.")
         if password != confirm_password:
-            self.add_error("confirm_password", "Hai mật khẩu bạn nhập không khớp nhau.")
+            self.add_error(
+                "confirm_password", "Lỗi: Hai mật khẩu bạn nhập không khớp nhau."
+            )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -102,3 +105,83 @@ class RegistrationForm(forms.ModelForm):
         # Gán class="form-control" cho tất cả các trường
         for field in self.fields.values():
             field.widget.attrs["class"] = "form-control"
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ("first_name", "last_name", "phone_number")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        self.validate_phone_number(cleaned_data.get("phone_number"))
+        return cleaned_data
+
+    def validate_phone_number(self, phone_number):
+        # Kiểm tra số điện thoại có hợp lệ hay không.
+        valid_prefixes = [
+            "086",
+            "096",
+            "097",
+            "098",
+            "032",
+            "033",
+            "034",
+            "035",
+            "036",
+            "037",
+            "038",
+            "039",  # Viettel
+            "088",
+            "091",
+            "094",
+            "083",
+            "084",
+            "085",
+            "081",
+            "082",  # Vinaphone
+            "089",
+            "090",
+            "093",
+            "070",
+            "079",
+            "077",
+            "076",
+            "078",  # Mobifone
+            "052",
+            "056",
+            "058",  # Vietnamobile,
+            "059",
+            "099",  # Gmobile,
+        ]
+
+        if not re.match(r"^\d{10}$", phone_number):
+            self.add_error("phone_number", "Lỗi: Số điện thoại phải đúng 10 chữ số.")
+            return
+
+        if phone_number[:3] not in valid_prefixes:
+            self.add_error(
+                "phone_number", "Lỗi: Số điện thoại không hợp lệ với nhà mạng tại Việt Nam."
+            )
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs["class"] = "form-control"
+
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            "address",
+            "commune",
+            "district",
+            "city",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs["class"] = "form-control"
