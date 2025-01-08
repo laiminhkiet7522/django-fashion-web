@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Chi tiết đơn hàng
+{% endblock %}
+
+{% block content %}
+<!-- breadcrumb start -->
+<div class="breadcrumb-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="page-title">
+          <h2>Chi tiết đơn hàng</h2>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chi tiết đơn hàng</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- breadcrumb End -->
+<!-- invoice 1 start -->
+<section class="theme-invoice-1 section-b-space">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-8 m-auto">
+        <div class="invoice-wrapper">
+          <div class="invoice-header">
+            <div class="upper-icon">
+              <img src="{% static '/images/invoice/invoice.svg' %}" class="img-fluid" alt="">
+            </div>
+            <div class="row header-content">
+              <div class="col-md-6">
+                <img src="{% static '/images/icon/logo.png' %}" class="img-fluid" alt="">
+                <div class="mt-md-4 mt-3">
+                  <h4 class="mb-2">
+                    KVBL Chuyên Áo Nam
+                  </h4>
+                  <h4 class="mb-0" style="text-transform: lowercase;">kvbl.shop.contact@gmail.com</h4>
+                </div>
+              </div>
+              <div class="col-md-6 text-md-end mt-md-0 mt-4">
+                <h2>Hoá Đơn Thanh Toán</h2>
+                <div class="mt-md-4 mt-3">
+                  <h4 class="mb-2">
+                    Tầng 1 tòa E, số 07 – 09 đường Nguyễn Bỉnh Khiêm,
+                  </h4>
+                  <h4 class="mb-0">phường Bến Nghé, quận 1, Thành phố Hồ Chí Minh.
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div class="detail-bottom">
+              <ul>
+                <li><span>Số Đơn Hàng :</span>
+                  <h4>{{ order.order_number }}</h4>
+                </li>
+                <li><span>Người Đặt :</span>
+                  <h4>{{ order.first_name }} {{ order.last_name }}</h4>
+                </li>
+                <li><span>Số Điện Thoại :</span>
+                  <h4>{{ order.phone_number }}</h4>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="invoice-body table-responsive-md">
+            <table class="table table-borderless mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Sản phẩm</th>
+                  <th scope="col">Giá</th>
+                  <th scope="col">Số lượng</th>
+                  <th scope="col">Tổng</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in order_details %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>
+                    {{ item.product.product_name }}<br>
+                    {% if item.variations.all %}
+                    {% for i in item.variations.all %}
+                    {{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
+                    {% endfor %}
+                    {% endif %}
+                  </td>
+                  <td style="text-transform: lowercase;" class="order-total product-price" data-price="{{ item.product_price }}"
+                    data-total="{{ item.product_price }}">{{ item.product_price }}</td>
+                  <td class="product-quantity" data-quantity="{{ item.quantity }}">{{ item.quantity }}</td>
+                  <td style="text-transform: lowercase;" class="product-total"></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2"></td>
+                  <td class="font-bold text-dark" colspan="2">Tạm tính</td>
+                  <td class="font-bold text-theme order-total">{{ subtotal }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"></td>
+                  <td class="font-bold text-dark" colspan="2">Phí vận chuyển</td>
+                  <td class="font-bold text-theme order-total">{{ shipping_fee }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"></td>
+                  <td class="font-bold text-dark" colspan="2">Tổng tiền</td>
+                  <td class="font-bold text-theme order-total">{{ grand_total }}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"></td>
+                  <td class="font-bold text-dark" colspan="2">Trạng thái</td>
+                  <td class="font-bold text-theme order-total">Đã thanh toán (Paypal)</td>
+                </tr>
+                <tr>
+                  <td colspan="2"></td>
+                  <td class="font-bold text-dark" colspan="2">Tổng tiền phải trả</td>
+                  <td class="font-bold text-theme order-total">0đ</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="invoice-footer text-end">
+            <div class="authorise-sign">
+              <img src="{% static '/images/invoice/sign.png' %}" class="img-fluid" alt="sing">
+              <span class="line"></span>
+              <h6>Chữ ký của người có thẩm quyền</h6>
+            </div>
+            <div class="buttons">
+              <p>KVBL Xin Cảm Ơn Quý Khách Đã Mua Hàng!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- invoice 1 end -->
+
+{% block script %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // Hàm định dạng tiền Việt Nam
+      function formatCurrencyVND(amount) {
+        return new Intl.NumberFormat("vi-VN", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(amount) + "đ";
+      }
+
+      // Tính tổng tiền cho từng dòng
+      const rows = document.querySelectorAll("tbody tr");
+      rows.forEach(row => {
+        const price = parseFloat(row.querySelector(".product-price").dataset.price);
+        const quantity = parseInt(row.querySelector(".product-quantity").dataset.quantity);
+
+        if (!isNaN(price) && !isNaN(quantity)) {
+          const total = price * quantity;
+
+          // Hiển thị tổng tiền đã được định dạng
+          const totalCell = row.querySelector(".product-total");
+          totalCell.textContent = formatCurrencyVND(total);
+        }
+      });
+
+      // Định dạng các cột tổng tiền chung (subtotal, shipping_fee, grand_total)
+      document.querySelectorAll(".order-total").forEach(element => {
+        const total = element.getAttribute("data-total");
+
+        if (total) {
+          // Hiển thị giá trị đã được định dạng
+          element.textContent = formatCurrencyVND(Number(total));
+        }
+      });
+    });
+
+</script>
+
+
+{% endblock %}
+
+{% endblock %}

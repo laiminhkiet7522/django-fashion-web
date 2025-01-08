@@ -14,6 +14,7 @@ from carts.models import Cart, CartItem
 from orders.models import Order, OrderDetail
 from django.http import HttpResponse
 import requests
+import locale
 
 
 # Create your views here.
@@ -178,7 +179,10 @@ def dashboard(request):
                 if user.check_password(current_password):
                     user.set_password(new_password)
                     user.save()
-                    messages.success(request, "Mật khẩu đã được đổi mới thành công! Vui lòng đăng nhập lại.")
+                    messages.success(
+                        request,
+                        "Mật khẩu đã được đổi mới thành công! Vui lòng đăng nhập lại.",
+                    )
                     return redirect("dashboard")
                 else:
                     messages.error(request, "Mật khẩu cũ không khớp.")
@@ -285,3 +289,47 @@ def resetPassword(request):
             return redirect("resetPassword")
     else:
         return render(request, "accounts/reset_password.html")
+
+
+@login_required(login_url="login")
+def order_detail(request, order_id):
+    # Lấy thông tin chi tiết đơn hàng và sản phẩm
+    order_details = OrderDetail.objects.filter(order__order_number=order_id)
+    order = get_object_or_404(Order, order_number=order_id)
+
+    # Khởi tạo các giá trị tính toán
+    subtotal = 0
+    shipping_fee = 0
+    grand_total = 0
+
+    # Tính toán từng mục trong order_details
+    for detail in order_details:
+        detail.item_total = (
+            detail.product_price * detail.quantity
+        )  # Tổng tiền từng sản phẩm
+        subtotal += detail.item_total  # Tổng tiền sản phẩm
+
+    # Tính phí vận chuyển (nếu cần)
+    if subtotal <= 200000:
+        shipping_fee = 25000
+
+    # Tổng tiền phải trả
+    grand_total = subtotal + shipping_fee
+
+    # Định dạng tiền tệ (VNĐ)
+    locale.setlocale(locale.LC_ALL, "vi_VN.UTF-8")
+    formatted_subtotal = locale.format_string("%d", subtotal, grouping=True) + "đ"
+    formatted_shipping_fee = (
+        locale.format_string("%d", shipping_fee, grouping=True) + "đ"
+    )
+    formatted_grand_total = locale.format_string("%d", grand_total, grouping=True) + "đ"
+
+    # Gửi dữ liệu vào context
+    context = {
+        "order_details": order_details,
+        "order": order,
+        "subtotal": formatted_subtotal,
+        "shipping_fee": formatted_shipping_fee,
+        "grand_total": formatted_grand_total,
+    }
+    return render(request, "accounts/order_detail.html", context)

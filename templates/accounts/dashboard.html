@@ -111,7 +111,7 @@ Quản lý tài khoản
                           {% for order in my_order %}
                           <tr>
                             <td>
-                              <span class="fs-6"><a href="">{{ order.order_number }}</a></span>
+                              <span class="fs-6"><a href="{% url 'order_detail' order.order_number %}" target="_blank">{{ order.order_number }}</a></span>
                             </td>
                             <td>
                               <span class="fs-6">{{ order.full_name }}</span>
