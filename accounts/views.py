@@ -151,31 +151,58 @@ def activate(request, uidb64, token):
 
 @login_required(login_url="login")
 def dashboard(request):
-    orders = Order.objects.order_by("-created_at").filter(
-        user_id=request.user.id, is_ordered=True
-    )
-    orders_count = orders.count()
-
-    my_order = Order.objects.filter(user=request.user, is_ordered=True).order_by(
+    orders = Order.objects.filter(user_id=request.user.id, is_ordered=True).order_by(
         "-created_at"
     )
-
+    orders_count = orders.count()
     userprofile = get_object_or_404(UserProfile, user=request.user)
+
+    # Định nghĩa mặc định cho forms
+    user_form = UserForm(instance=request.user)
+    profile_form = UserProfileForm(instance=userprofile)
+
     if request.method == "POST":
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileForm(request.POST, instance=userprofile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Thông tin đã được cập nhật thành công.")
-            return redirect("dashboard")
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = UserProfileForm(instance=userprofile)
+        if "current_password" in request.POST:
+            # Xử lý đổi mật khẩu
+            current_password = request.POST.get("current_password")
+            new_password = request.POST.get("new_password")
+            confirm_password = request.POST.get("confirm_password")
+
+            if not current_password or not new_password or not confirm_password:
+                messages.error(request, "Vui lòng nhập đủ các trường mật khẩu.")
+                return redirect("dashboard")
+
+            user = Account.objects.get(username__exact=request.user.username)
+
+            if new_password == confirm_password:
+                if user.check_password(current_password):
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(request, "Mật khẩu đã được đổi mới thành công! Vui lòng đăng nhập lại.")
+                    return redirect("dashboard")
+                else:
+                    messages.error(request, "Mật khẩu cũ không khớp.")
+            else:
+                messages.error(
+                    request, "Mật khẩu xác nhận không khớp với mật khẩu mới."
+                )
+
+        elif "first_name" in request.POST:
+            # Xử lý cập nhật thông tin cá nhân
+            user_form = UserForm(request.POST, instance=request.user)
+            profile_form = UserProfileForm(request.POST, instance=userprofile)
+
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                messages.success(request, "Thông tin đã được cập nhật thành công.")
+                return redirect("dashboard")
+        else:
+            messages.error(request, "Yêu cầu không hợp lệ.")
 
     context = {
         "orders_count": orders_count,
-        "my_order": my_order,
+        "my_order": orders,
         "user_form": user_form,
         "profile_form": profile_form,
         "userprofile": userprofile,
@@ -258,4 +285,3 @@ def resetPassword(request):
             return redirect("resetPassword")
     else:
         return render(request, "accounts/reset_password.html")
-

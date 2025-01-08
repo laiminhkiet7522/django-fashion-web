@@ -168,7 +168,8 @@ Quản lý tài khoản
                               </div>
                               <div class="form-row row">
                                 <div class="form-group col-md-12">
-                                  <label>Địa chỉ (Số nhà, Tên đường, Ấp / Thôn) <span class="text-danger">*</span></label>
+                                  <label>Địa chỉ (Số nhà, Tên đường, Ấp / Thôn) <span
+                                      class="text-danger">*</span></label>
                                   {{ profile_form.address }}
                                 </div>
                               </div>
@@ -192,32 +193,36 @@ Quản lý tài khoản
                               class="btn btn-solid me-3">Cập nhật</button></div>
                         </div>
                       </form>
+
                       <div class="dashboard-title mt-lg-5 mt-3">
                         <h4>Đổi mật khẩu mới</h4>
                       </div>
-                      <div class="dashboard-detail">
-                        <ul>
-                          <li>
-                            <div class="form-row row">
-                              <div class="form-group col-md-12">
-                                <label for="">Mật khẩu cũ</label>
-                                <input type="text" class="form-control" name="" value="">
+                      <form action="{% url 'dashboard' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="dashboard-detail">
+                          <ul>
+                            <li>
+                              <div class="form-row row">
+                                <div class="form-group col-md-12">
+                                  <label for="">Mật khẩu cũ <span class="text-danger">*</span></label>
+                                  <input type="password" class="form-control" name="current_password" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                  <label for="">Mật khẩu mới <span class="text-danger">*</span></label>
+                                  <input type="password" class="form-control" name="new_password" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                  <label for="">Nhập lại mật khẩu mới <span class="text-danger">*</span></label>
+                                  <input type="password" class="form-control" name="confirm_password" required>
+                                </div>
                               </div>
-                              <div class="form-group col-md-12">
-                                <label for="">Mật khẩu mới</label>
-                                <input type="text" class="form-control" name="" value="">
-                              </div>
-                              <div class="form-group col-md-12">
-                                <label for="">Nhập lại mật khẩu mới</label>
-                                <input type="text" class="form-control" name="" value="">
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                        <div style="display: flex; justify-content: end;"><button type="submit"
-                            class="btn btn-solid me-3">Đổi mật khẩu</button>
+                            </li>
+                          </ul>
+                          <div style="display: flex; justify-content: end;"><button type="submit"
+                              class="btn btn-solid me-3">Đổi mật khẩu</button>
+                          </div>
                         </div>
-                      </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -238,7 +243,7 @@ Quản lý tài khoản
     color: #721c24;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
-    padding: 10px;
+    padding: 1rem 1rem;
     border-radius: 5px;
     font-size: 1rem;
     margin-top: 5px;
@@ -267,7 +272,7 @@ Quản lý tài khoản
 
   setTimeout(function () {
     $('#message').fadeOut('slow')
-  }, 5000)
+  }, 10000)
 </script>
 
 <script>
