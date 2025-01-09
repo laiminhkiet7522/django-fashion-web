@@ -15,6 +15,8 @@ from orders.models import Order, OrderDetail
 from django.http import HttpResponse
 import requests
 import locale
+from django.utils.timezone import localtime
+from django.db.models import Case, When
 
 
 # Create your views here.
@@ -163,6 +165,20 @@ def dashboard(request):
     orders_count = orders.count()
     userprofile = get_object_or_404(UserProfile, user=request.user)
 
+    # Định dạng ngày giờ cho đơn hàng
+    formatted_orders = []
+    for order in orders:
+        formatted_order = {
+            "order_number": order.order_number,
+            "full_name": order.full_name(),
+            "phone_number": order.phone_number,
+            "order_total": order.order_total,
+            "status": order.status,
+            # Chuyển đổi `created_at` sang định dạng Việt Nam
+            "created_at": localtime(order.created_at).strftime("%d/%m/%Y %H:%M"),
+        }
+        formatted_orders.append(formatted_order)
+
     # Định nghĩa mặc định cho forms
     user_form = UserForm(instance=request.user)
     profile_form = UserProfileForm(instance=userprofile)
@@ -211,7 +227,7 @@ def dashboard(request):
 
     context = {
         "orders_count": orders_count,
-        "my_order": orders,
+        "my_order": formatted_orders,
         "user_form": user_form,
         "profile_form": profile_form,
         "userprofile": userprofile,
@@ -314,7 +330,17 @@ def order_detail(request, order_id):
         )  # Tổng tiền từng sản phẩm
         subtotal += detail.item_total  # Tổng tiền sản phẩm
 
-    # Tính phí vận chuyển (nếu cần)
+        # Sắp xếp variations theo thứ tự "Color" trước, "Size" sau
+        sorted_variations = detail.variations.all().order_by(
+            Case(
+                When(variation_category="Color", then=0),
+                When(variation_category="Size", then=1),
+                default=2,
+            )
+        )
+        detail.sorted_variations = sorted_variations
+
+    # Tính phí vận chuyển
     if subtotal <= 200000:
         shipping_fee = 25000
 

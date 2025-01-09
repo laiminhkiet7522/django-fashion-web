@@ -39,7 +39,7 @@ Chi tiết đơn hàng
             </div>
             <div class="row header-content">
               <div class="col-md-6">
-                <img src="{% static '/images/icon/logo.png' %}" class="img-fluid" alt="">
+                <img style="width: 200px; height: 150px;" src="{% static '/images/icon/logo/logo.png' %}" class="img-fluid" alt="">
                 <div class="mt-md-4 mt-3">
                   <h4 class="mb-2">
                     KVBL Chuyên Áo Nam
@@ -89,9 +89,9 @@ Chi tiết đơn hàng
                   <th scope="row">{{ forloop.counter }}</th>
                   <td>
                     {{ item.product.product_name }}<br>
-                    {% if item.variations.all %}
-                    {% for i in item.variations.all %}
-                    {{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
+                    {% if item.sorted_variations %}
+                    {% for variation in item.sorted_variations %}
+                    {{ variation.variation_category | capfirst }} : {{ variation.variation_value | capfirst }}<br>
                     {% endfor %}
                     {% endif %}
                   </td>

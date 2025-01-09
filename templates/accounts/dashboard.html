@@ -44,9 +44,6 @@ Quản lý tài khoản
       <div class="col-lg-3">
         <div class="dashboard-sidebar">
           <div class="profile-top">
-            <div class="profile-image">
-              <img src="{% static '/images/avtar.jpg' %}" alt="" class="img-fluid">
-            </div>
             <div class="profile-detail">
               <h5>{{ user.first_name }} {{ user.last_name }}</h5>
               <h6>{{ user.email }}</h6>
@@ -128,7 +125,23 @@ Quản lý tài khoản
                               <span class="fs-6">{{ order.created_at }}</span>
                             </td>
                             <td>
-                              <span class="fs-6">{{ order.status }}</span>
+                              <span class="fs-6">
+                                {% if order.status == "New" %}
+                                Mới
+                                {% elif order.status == "Confirmed" %}
+                                Đã xác nhận
+                                {% elif order.status == "Processing" %}
+                                Đang đóng gói
+                                {% elif order.status == "Shipping" %}
+                                Đang vận chuyển
+                                {% elif order.status == "Delivered" %}
+                                Đã giao hàng
+                                {% elif order.status == "Cancelled" %}
+                                Đã huỷ
+                                {% else %}
+                                {{ order.status }}
+                                {% endif %}
+                              </span>
                             </td>
                           </tr>
                           {% endfor %}

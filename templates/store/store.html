@@ -58,58 +58,6 @@ Shop{% if category_slug %}
   <div class="collection-wrapper">
     <div class="container">
       <div class="row">
-        <div class="col-sm-3 collection-filter">
-
-
-          <!-- side-bar colleps block stat -->
-          <div class="collection-filter-block">
-            <!-- brand filter start -->
-            <div class="collection-collapse-block open">
-              <h3 class="collapse-block-title">Loại áo</h3>
-              <div class="collection-collapse-block-content">
-                <div class="collection-brand-filter">
-                  {% for category in links %}
-                  <div class="form-check collection-filter-checkbox">
-                    <input type="checkbox" class="form-check-input" id="">
-                    <label class="form-check-label" for="">{{ category.category_name }}</label>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-            <!-- brand filter end -->
-
-            <!-- size filter start here -->
-            <div class="collection-collapse-block border-0 open">
-              <h3 class="collapse-block-title">size</h3>
-              <div class="collection-collapse-block-content">
-                <div class="collection-brand-filter">
-                  <div class="form-check collection-filter-checkbox">
-                    <input type="checkbox" class="form-check-input" id="">
-                    <label class="form-check-label" for="">s</label>
-                  </div>
-                  <div class="form-check collection-filter-checkbox">
-                    <input type="checkbox" class="form-check-input" id="">
-                    <label class="form-check-label" for="">m</label>
-                  </div>
-                  <div class="form-check collection-filter-checkbox">
-                    <input type="checkbox" class="form-check-input" id="">
-                    <label class="form-check-label" for="">l</label>
-                  </div>
-                  <div class="form-check collection-filter-checkbox">
-                    <input type="checkbox" class="form-check-input" id="">
-                    <label class="form-check-label" for="">xl</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- size filter end here -->
-          </div>
-          <!-- silde-bar colleps block end here -->
-
-
-        </div>
-
         <div class="collection-content col">
           <div class="page-main-content">
             <div class="row">
@@ -170,10 +118,6 @@ Shop{% if category_slug %}
                             <div class="back">
                               <a href="{{ item.product.get_url }}"><img src="{{ item.next_image.image.url }}"
                                   class="img-fluid blur-up lazyload bg-img" alt=""></a>
-                            </div>
-                            <div class="cart-info cart-wrap">
-                              <a href="javascript:void(0)" title="Add to Wishlist"><i class="ti-heart"
-                                  aria-hidden="true"></i></a>
                             </div>
                           </div>
                           <div class="product-detail">

@@ -23,7 +23,6 @@ class OrderAdmin(admin.ModelAdmin):
         "full_name",
         "phone_number",
         "email",
-        "shipping_fee",
         "order_total",
         "status",
         "is_ordered",
