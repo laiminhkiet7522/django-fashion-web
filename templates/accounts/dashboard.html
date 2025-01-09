@@ -45,7 +45,7 @@ Quản lý tài khoản
         <div class="dashboard-sidebar">
           <div class="profile-top">
             <div class="profile-image">
-              <img src="../assets/images/avtar.jpg" alt="" class="img-fluid">
+              <img src="{% static '/images/avtar.jpg' %}" alt="" class="img-fluid">
             </div>
             <div class="profile-detail">
               <h5>{{ user.first_name }} {{ user.last_name }}</h5>
@@ -105,6 +105,7 @@ Quản lý tài khoản
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Tổng cộng</th>
                             <th scope="col">Ngày đặt hàng</th>
+                            <th scope="col">Trạng thái</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -125,6 +126,9 @@ Quản lý tài khoản
                             </td>
                             <td>
                               <span class="fs-6">{{ order.created_at }}</span>
+                            </td>
+                            <td>
+                              <span class="fs-6">{{ order.status }}</span>
                             </td>
                           </tr>
                           {% endfor %}
@@ -208,7 +212,7 @@ Quản lý tài khoản
                                   <input type="password" class="form-control" name="current_password" required>
                                 </div>
                                 <div class="form-group col-md-12">
-                                  <label for="">Mật khẩu mới <span class="text-danger">*</span></label>
+                                  <label for="">Mật khẩu mới (Dài hơn 6 ký tự) <span class="text-danger">*</span></label>
                                   <input type="password" class="form-control" name="new_password" required>
                                 </div>
                                 <div class="form-group col-md-12">

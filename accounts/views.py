@@ -38,6 +38,11 @@ def register(request):
             user.phone_number = phone_number
             user.save()
 
+            # Tạo thông tin người dùng
+            profile = UserProfile()
+            profile.user_id = user.id
+            profile.save()
+
             # Kích hoạt người dùng
             current_site = get_current_site(request)
             mail_subject = "Kích hoạt tài khoản"

@@ -39,43 +39,43 @@ Thông tin giao hàng
           <div class="row">
             <div class="col-lg-6 col-sm-12 col-xs-12">
               <div class="checkout-title">
-                <h3>Vui lòng điền đầy đủ thông tin giao hàng</h3>
+                <h3>Vui lòng điền và kiểm tra thông tin giao hàng</h3>
               </div>
               <div class="row check-out">
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Họ và tên đệm</div>
-                  <input type="text" name="first_name" value="" placeholder="Nhập vào họ và tên đệm . . ." required>
+                  <input type="text" name="first_name" value="{{ first_name }}" placeholder="Nhập vào họ và tên đệm . . ." required>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Tên</div>
-                  <input type="text" name="last_name" value="" placeholder="Nhập vào tên . . ." required>
+                  <input type="text" name="last_name" value="{{ last_name }}" placeholder="Nhập vào tên . . ." required>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Số điện thoại</div>
-                  <input type="text" name="phone_number" value="" placeholder="Nhập vào số điện thoại . . ." required>
+                  <input type="text" name="phone_number" value="{{ phone_number }}" placeholder="Nhập vào số điện thoại . . ." required>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                   <div class="field-label">Email</div>
-                  <input type="text" name="email" value="" placeholder="Nhập vào email . . ." required>
+                  <input type="text" name="email" value="{{ email }}" placeholder="Nhập vào email . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                   <div class="field-label">Địa chỉ</div>
-                  <input type="text" name="address" value=""
+                  <input type="text" name="address" value="{{ address }}"
                     placeholder="Nhập vào số nhà, tên đường, ấp. Ví dụ (Số 7, Đường T14, Ấp 4) . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-6 col-xs-12">
                   <div class="field-label">Xã / Phường</div>
-                  <input type="text" name="commune" value=""
+                  <input type="text" name="commune" value="{{ commune }}"
                     placeholder="Nhập vào xã hoặc phường. Ví dụ (Tân Quý Tây) . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-6 col-xs-12">
                   <div class="field-label">Quận / Huyện</div>
-                  <input type="text" name="district" value=""
+                  <input type="text" name="district" value="{{ district }}"
                     placeholder="Nhập vào quận hoặc huyện. Ví dụ (Bình Chánh) . . ." required>
                 </div>
                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                   <div class="field-label">Tỉnh / Thành Phố</div>
-                  <input type="text" name="city" value=""
+                  <input type="text" name="city" value="{{ city }}"
                     placeholder="Nhập vào tỉnh hoặc thành phố. Ví dụ (Hồ Chí Minh) . . ." required>
                 </div>
               </div>
