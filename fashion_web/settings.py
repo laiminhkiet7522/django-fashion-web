@@ -151,6 +151,6 @@ MESSAGE_TAGS = {
 # Cấu hình gửi mail
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "kietminh070502@gmail.com"
-EMAIL_HOST_PASSWORD = "kpzx orbm mumd iijc"
+EMAIL_HOST_USER = "kvbl.shop.contact@gmail.com"
+EMAIL_HOST_PASSWORD = "aqhq hkaj jxkx ibkt"
 EMAIL_USE_TLS = True

@@ -10,6 +10,7 @@ import string
 from accounts.models import Account
 
 
+
 def generate_unique_image_name(instance, filename):
     """
     Sinh một tên file duy nhất cho hình ảnh dựa trên "image_" và chuỗi ngẫu nhiên 10 ký tự.
