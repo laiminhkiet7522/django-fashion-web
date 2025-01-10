@@ -8,25 +8,28 @@ from math import floor
 
 
 def store(request, category_slug=None):
-
     categories = None
     products = None
 
-    if category_slug:
-        # Lấy danh mục theo slug, nếu không tìm thấy sẽ trả về lỗi 404
-        categories = get_object_or_404(Category, slug=category_slug)
-        # Lọc sản phẩm theo danh mục
-        products = Product.objects.filter(
-            category=categories, is_available=True
-        ).order_by("-created_at")
-    else:
-        # Lấy tất cả sản phẩm nếu không có category_slug
-        products = Product.objects.filter(is_available=True).order_by("-created_at")
+    sort_by = request.GET.get("sort", "")  # Lấy tham số sort từ URL
 
-    # Đếm số sản phẩm được tìm thấy
+    if category_slug:
+        categories = get_object_or_404(Category, slug=category_slug)
+        products = Product.objects.filter(category=categories, is_available=True)
+    else:
+        products = Product.objects.filter(is_available=True)
+
+    # Thực hiện sắp xếp dựa trên tham số sort
+    if sort_by == "price_high_to_low":
+        products = products.order_by("-price")
+    elif sort_by == "price_low_to_high":
+        products = products.order_by("price")
+    else:
+        products = products.order_by("-created_at")
+
     product_count = products.count()
 
-    # Kết hợp sản phẩm với ảnh chính (is_main=True) và ảnh tiếp theo ảnh chính
+    # Kết hợp sản phẩm với ảnh
     products_with_images = [
         {
             "product": product,
@@ -100,21 +103,29 @@ def search(request):
     products = []
     product_count = 0
     keyword_exists = False
+    sort_by = request.GET.get("sort", "")  # Lấy tham số sort từ URL
 
     if "keyword" in request.GET:
         keyword_exists = True
         keyword = request.GET["keyword"].strip()  # Loại bỏ khoảng trắng thừa
         if keyword:
-            # Viết hoa chữ cái đầu mỗi từ
             formatted_keyword = keyword.title()
 
-            # Sử dụng icontains để tìm kiếm không phân biệt chữ hoa, chữ thường
-            products = Product.objects.order_by("-created_at").filter(
+            products = Product.objects.filter(
                 Q(product_name__icontains=formatted_keyword)
             )
+
+            # Thực hiện sắp xếp dựa trên tham số sort
+            if sort_by == "price_high_to_low":
+                products = products.order_by("-price")
+            elif sort_by == "price_low_to_high":
+                products = products.order_by("price")
+            else:
+                products = products.order_by("-created_at")
+
             product_count = products.count()
 
-    # Kết hợp sản phẩm với ảnh chính (is_main=True) và ảnh tiếp theo ảnh chính
+    # Kết hợp sản phẩm với ảnh
     products_with_images = [
         {
             "product": product,
@@ -131,7 +142,7 @@ def search(request):
     context = {
         "products_with_images": products_with_images,
         "product_count": product_count,
-        "keyword": keyword,
+        "keyword": keyword if keyword_exists else "",
         "keyword_exists": keyword_exists,
     }
     return render(request, "store/store.html", context)

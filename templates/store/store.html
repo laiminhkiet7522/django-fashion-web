@@ -95,12 +95,16 @@ Shop{% if category_slug %}
                             </ul>
                           </div>
                           <div class="product-page-filter">
-                            <select>
-                              <option value="High to low">Sắp xếp theo</option>
-                              <option value="Low to High">Giá giảm dần</option>
-                              <option value="Low to High">Giá tăng dần</option>
+                            <select id="sort-select" onchange="sortProducts()">
+                                <option value="">Sắp xếp theo</option>
+                                <option value="price_high_to_low" {% if request.GET.sort == 'price_high_to_low' %}selected{% endif %}>
+                                    Giá giảm dần
+                                </option>
+                                <option value="price_low_to_high" {% if request.GET.sort == 'price_low_to_high' %}selected{% endif %}>
+                                    Giá tăng dần
+                                </option>
                             </select>
-                          </div>
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -155,5 +159,16 @@ Shop{% if category_slug %}
   </div>
 </section>
 <!-- section End -->
+{% block script %}
+<script>
+  function sortProducts() {
+      const sortValue = document.getElementById('sort-select').value;
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('sort', sortValue);
+      window.location.href = currentUrl.toString();
+  }
+</script>
+{% endblock %}
+
 {% endif %}
 {% endblock %}
