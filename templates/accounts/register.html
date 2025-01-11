@@ -42,11 +42,9 @@
             >Đăng nhập ngay</a
           >
         </h3>
+        {% include 'includes/alerts.html' %}
 
-        <div class="theme-card">
-          {% include 'includes/alerts.html' %}
-
-          <!-- --------------------------------------------------- -->
+        <!-- --------------------------------------------------- -->
           <!-- Non-field errors -->
           {% if form.non_field_errors %}
           <div class="alert alert-danger">
@@ -95,6 +93,7 @@
           </div>
           {% endif %}
 
+        <div class="theme-card">
           <form class="theme-form" action="{% url 'register' %}" method="POST">
             {% csrf_token %}
 
@@ -188,8 +187,10 @@
     border: 1px solid #f5c6cb;
     padding: 10px;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 1rem;
     margin-top: 5px;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
   }
 
   .alert.alert-danger p {

@@ -194,6 +194,11 @@ def dashboard(request):
                 messages.error(request, "Vui lòng nhập đủ các trường mật khẩu.")
                 return redirect("dashboard")
 
+            # Kiểm tra độ dài mật khẩu mới
+            if len(new_password) < 6:
+                messages.error(request, "Mật khẩu mới phải dài ít nhất 6 ký tự.")
+                return redirect("dashboard")
+
             user = Account.objects.get(username__exact=request.user.username)
 
             if new_password == confirm_password:
@@ -291,7 +296,7 @@ def resetPassword(request):
         confirm_password = request.POST["confirm_password"]
 
         if len(password) < 6:
-            messages.error(request, "Mật khẩu phải dài ít nhất 6 ký tự.")
+            messages.error(request, "Mật khẩu mới phải dài ít nhất 6 ký tự.")
             return redirect("resetPassword")
 
         if password == confirm_password:

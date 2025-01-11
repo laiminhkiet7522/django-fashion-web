@@ -30,6 +30,9 @@ Quản lý tài khoản
 <!-- breadcrumb End -->
 
 <!--  dashboard section start -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
 <section class="dashboard-section section-b-space user-dashboard-section">
   <div class="container">
     {% include 'includes/alerts.html' %}
@@ -109,7 +112,8 @@ Quản lý tài khoản
                           {% for order in my_order %}
                           <tr>
                             <td>
-                              <span class="fs-6"><a href="{% url 'order_detail' order.order_number %}" target="_blank">{{ order.order_number }}</a></span>
+                              <span class="fs-6"><a href="{% url 'order_detail' order.order_number %}"
+                                  target="_blank">{{ order.order_number }}</a></span>
                             </td>
                             <td>
                               <span class="fs-6">{{ order.full_name }}</span>
@@ -220,17 +224,33 @@ Quản lý tài khoản
                           <ul>
                             <li>
                               <div class="form-row row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-12" id="show_hide_password">
                                   <label for="">Mật khẩu cũ <span class="text-danger">*</span></label>
-                                  <input type="password" class="form-control" name="current_password" required>
+                                  <input type="password" name="current_password" class="form-control" required="" />
+                                  <a href="javascript:;"
+                                    style="position: absolute; top: 50%; right: 2.5rem; border: none; background: none; height: 2rem; width: 1rem;"
+                                    class="input-group-text bg-transparent"><i class="fa-solid fa-eye-slash"></i></a>
+                                  <!-- <input type="password" class="form-control" name="current_password" required> -->
                                 </div>
-                                <div class="form-group col-md-12">
-                                  <label for="">Mật khẩu mới (Dài hơn 6 ký tự) <span class="text-danger">*</span></label>
-                                  <input type="password" class="form-control" name="new_password" required>
+                                <div class="form-group col-md-12" id="show_hide_new_password">
+                                  <label for="">Mật khẩu mới (Dài hơn 6 ký tự) <span
+                                      class="text-danger">*</span></label>
+                                  <input type="password" name="new_password" class="form-control" required="" />
+                                  <a href="javascript:;"
+                                    style="position: absolute; top: 50%; right: 2.5rem; border: none; background: none; height: 2rem; width: 1rem;"
+                                    class="input-group-text bg-transparent"><i class="fa-solid fa-eye-slash"></i></a>
+
+
+                                  <!-- <input type="password" class="form-control" name="new_password" required> -->
                                 </div>
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-12" id="show_hide_confirm_password">
                                   <label for="">Nhập lại mật khẩu mới <span class="text-danger">*</span></label>
-                                  <input type="password" class="form-control" name="confirm_password" required>
+                                  <input type="password" name="confirm_password" class="form-control" required="" />
+                                  <a href="javascript:;"
+                                    style="position: absolute; top: 50%; right: 2.5rem; border: none; background: none; height: 2rem; width: 1rem;"
+                                    class="input-group-text bg-transparent"><i class="fa-solid fa-eye-slash"></i></a>
+
+                                  <!-- <input type="password" class="form-control" name="confirm_password" required> -->
                                 </div>
                               </div>
                             </li>
@@ -314,6 +334,59 @@ Quản lý tài khoản
 
         // Cập nhật nội dung của ô
         element.textContent = formattedTotal;
+      }
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('#show_hide_password a').on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_password input').attr('type') == 'text') {
+        $('#show_hide_password input').attr('type', 'password');
+        $('#show_hide_password i').addClass('fa-eye-slash');
+        $('#show_hide_password i').removeClass('fa-eye');
+      } else if ($('#show_hide_password input').attr('type') == 'password') {
+        $('#show_hide_password input').attr('type', 'text');
+        $('#show_hide_password i').removeClass('fa-eye-slash');
+        $('#show_hide_password i').addClass('fa-eye');
+      }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#show_hide_new_password a').on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_new_password input').attr('type') == 'text') {
+        $('#show_hide_new_password input').attr('type', 'password');
+        $('#show_hide_new_password i').addClass('fa-eye-slash');
+        $('#show_hide_new_password i').removeClass('fa-eye');
+      } else if (
+        $('#show_hide_new_password input').attr('type') == 'password'
+      ) {
+        $('#show_hide_new_password input').attr('type', 'text');
+        $('#show_hide_new_password i').removeClass('fa-eye-slash');
+        $('#show_hide_new_password i').addClass('fa-eye');
+      }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('#show_hide_confirm_password a').on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_confirm_password input').attr('type') == 'text') {
+        $('#show_hide_confirm_password input').attr('type', 'password');
+        $('#show_hide_confirm_password i').addClass('fa-eye-slash');
+        $('#show_hide_confirm_password i').removeClass('fa-eye');
+      } else if (
+        $('#show_hide_confirm_password input').attr('type') == 'password'
+      ) {
+        $('#show_hide_confirm_password input').attr('type', 'text');
+        $('#show_hide_confirm_password i').removeClass('fa-eye-slash');
+        $('#show_hide_confirm_password i').addClass('fa-eye');
       }
     });
   });
