@@ -1,11 +1,5 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}
-Đăng nhập tài khoản
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block title %} Đăng nhập tài
+khoản {% endblock %} {% block content %}
 <!-- breadcrumb start -->
 <div class="breadcrumb-section">
   <div class="container">
@@ -18,8 +12,12 @@
       <div class="col-sm-6">
         <nav aria-label="breadcrumb" class="theme-breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Đăng nhập</li>
+            <li class="breadcrumb-item">
+              <a href="{% url 'home' %}">Trang chủ</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              Đăng nhập
+            </li>
           </ol>
         </nav>
       </div>
@@ -30,37 +28,51 @@
 
 {% if request.GET.command == 'verification' %}
 
-<div class="container mx-auto alert alert-info text-center" role="alert" style="max-width: 1024px; margin-top:100px; margin-bottom: 100px;">
-  Cảm ơn bạn đã đăng ký tài khoản. Chúng tôi đã gửi cho bạn một email xác minh đến địa chỉ email của bạn
-  [{{request.GET.email}}]. <br><br>Vui lòng nhấp vào link đính kèm để tiến hành xác thực tài khoản.
-  <br><br>
+<div class="container mx-auto alert alert-info text-center" role="alert"
+  style="max-width: 1024px; margin-top: 100px; margin-bottom: 100px">
+  Cảm ơn bạn đã đăng ký tài khoản. Chúng tôi đã gửi cho bạn một email xác minh
+  đến địa chỉ email của bạn [{{request.GET.email}}]. <br /><br />Vui lòng nhấp
+  vào link đính kèm để tiến hành xác thực tài khoản. <br /><br />
   Đã xác thực rồi? <a href="{% url 'login' %}">Đăng nhập ngay</a>
 </div>
 
 {% else %}
 
 <!--section start-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
 <section class="login-page section-b-space">
   <div class="container">
     <div class="row">
       <div class="col-lg-6">
         <h3>Thông tin đăng nhập</h3>
         <div class="theme-card">
-
           {% include 'includes/alerts.html' %}
 
           <form class="theme-form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
               <label for="email">Email <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" placeholder="Nhập vào email . . ." name="email" required="">
+              <input type="text" class="form-control" placeholder="Nhập vào email . . ." name="email" required="" />
             </div>
-            <div class="form-group">
+
+            <!-- <div class="form-group">
               <label for="password">Mật khẩu <span class="text-danger">*</span></label>
               <input type="password" class="form-control" placeholder="Nhập vào mật khẩu . . ." name="password"
-                required="">
+                required="" />
+            </div> -->
+
+            <div class="form-group">
+              <label for="password">Mật khẩu <span class="text-danger">*</span></label>
+              <div class="input-group" id="show_hide_password">
+                <input type="password" name="password" placeholder="Nhập vào mật khẩu . . ." class="form-control"
+                  id="password" required="" />
+                <a href="javascript:;" style="position: absolute; top: 15%; right: 1.5rem; border: none; background: none; height: 2rem; width: 1rem;" class="input-group-text bg-transparent"><i class="fa-solid fa-eye-slash"></i></a>
+              </div>
             </div>
-            <div class="form-group" style="display: flex; justify-content: space-between;">
+
+            <div class="form-group" style="display: flex; justify-content: space-between">
               <button type="submit" class="btn btn-solid">Đăng nhập</button>
               <a href="{% url 'forgotPassword' %}">Quên mật khẩu?</a>
             </div>
@@ -71,9 +83,12 @@
         <h3>Bạn chưa có tài khoản?</h3>
         <div class="theme-card authentication-right">
           <h6 class="title-font">Đăng ký tài khoản</h6>
-          <p>Đăng ký tài khoản miễn phí tại cửa hàng của chúng tôi. Đăng ký nhanh chóng và dễ dàng. Nó cho phép bạn có
-            thể đặt hàng từ cửa hàng của chúng tôi. Để bắt đầu mua sắm, hãy nhấp vào đăng ký.</p><a
-            href="{% url 'register' %}" class="btn btn-solid">Đăng ký</a>
+          <p>
+            Đăng ký tài khoản miễn phí tại cửa hàng của chúng tôi. Đăng ký nhanh
+            chóng và dễ dàng. Nó cho phép bạn có thể đặt hàng từ cửa hàng của
+            chúng tôi. Để bắt đầu mua sắm, hãy nhấp vào đăng ký.
+          </p>
+          <a href="{% url 'register' %}" class="btn btn-solid">Đăng ký</a>
         </div>
       </div>
     </div>
@@ -83,11 +98,23 @@
 {% block script %}
 <script>
   setTimeout(function () {
-    $('#message').fadeOut('slow')
-  }, 5000)
+    $('#message').fadeOut('slow');
+  }, 5000);
 </script>
-{% endblock %}
-
-{% endif %}
-
-{% endblock %}
+<script>
+  $(document).ready(function () {
+    $('#show_hide_password a').on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_password input').attr('type') == 'text') {
+        $('#show_hide_password input').attr('type', 'password');
+        $('#show_hide_password i').addClass('fa-eye-slash');
+        $('#show_hide_password i').removeClass('fa-eye');
+      } else if ($('#show_hide_password input').attr('type') == 'password') {
+        $('#show_hide_password input').attr('type', 'text');
+        $('#show_hide_password i').removeClass('fa-eye-slash');
+        $('#show_hide_password i').addClass('fa-eye');
+      }
+    });
+  });
+</script>
+{% endblock %} {% endif %} {% endblock %}
